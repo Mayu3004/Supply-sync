@@ -1,0 +1,25 @@
+ 
+.SidebarContainer {
+    
+    width: 200px; 
+    padding: 20px; 
+}
+
+.SidebarItem {
+    display: block;
+    padding: 1rem 0.5rem; 
+    color: #4a6084; 
+    text-decoration: none; 
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.SidebarItem:hover {
+    background-color: #e4f2fe; 
+    border-radius: 4px;
+    transform: scale(1.01)
+}
+.SidebarItem:active{
+    background-color: #e4f2fe; 
+    color: #2196f3;
+}

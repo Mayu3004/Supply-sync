@@ -1,0 +1,30 @@
+ 
+ 
+.NavbarContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .LeftContainer{
+        display: flex;
+        gap: 1rem;
+        .ProfileImage{
+            width: 40px;
+            height: 40px;
+        }
+        .LogoutBtn{
+            // width: 100%;
+            padding: 0.5rem 1rem;
+            // margin-bottom: 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #0f62fe;
+            color: white;
+            cursor: pointer;
+            &:hover {
+                background-color: #015aff;
+            }
+        }
+    }
+    
+}
+

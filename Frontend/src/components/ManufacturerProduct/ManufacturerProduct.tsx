@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import Card from "../Card/Card.tsx";
 import styles from "./ManufacturerProduct.module.scss";
 import { ManufacturerProductProps, Product } from "./ManufacturerProduct.types.ts"
-import { fetchProducts } from "../../services/manufacturer/manufacturer.services.ts";
+import { fetchProducts } from "../../services/manufacturerProducts.services.ts";
+import ProductForm from "../ProductForm/ProductForm.tsx";
 
 const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
-
+    const [isModalOpen,setIsModalOpen] = useState<boolean>(false)
     const [products, setProduts] = useState<Product[]>();
 
     const onUpdate = () => {
@@ -28,9 +29,23 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
 
     }, [])
 
+    const handleClick = () =>{
+        setIsModalOpen(true);
+
+        // console.log("clicked");   
+    }
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className={styles.ManufacturerProductContainer}>
-            <button className={styles.AddBtn}>ADD</button>
+            <button 
+                className={styles.AddBtn}
+                onClick={handleClick}    
+            >
+                    ADD
+                </button>
             <div className={styles.DataContainer}>
                 {products?.map((product, index) => (
                     <Card
@@ -45,7 +60,14 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                     />
                 ))}
             </div>
-
+            {isModalOpen && (
+                <div className={styles.ModalView}>
+                    <div className={styles.ModalContent}>
+                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <ProductForm />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,4 +1,5 @@
  export interface MerchandiseData {
+    // id: number;
     itemName: string;
     details: string;
     points: number;

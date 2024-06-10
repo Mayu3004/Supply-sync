@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import Card from "../Card/Card.tsx";
 import styles from "./Merchandise.module.scss";
 import { MerchandiseData, MerchandiseProps } from "./Merchandise.types.ts"
-import { fetchMerchandise } from "../../services/manufacturer/manufacturer.services.ts";
+import { fetchMerchandise } from "../../services/manufacturer.Merchandise.ts";
+import RequestMerchandise from "../RequestMerchandise/RequestMerchandise.tsx";
 
 const Merchandise = ({ }: MerchandiseProps) => {
     const [merchandises, setMerchandises] = useState<MerchandiseData[]>()
+    const [view, setView] = useState<'pending' | 'completed'>('pending');
 
     const onUpdate = () => {
         console.log("update");
@@ -30,6 +32,7 @@ const Merchandise = ({ }: MerchandiseProps) => {
 
     }, [])
 
+
     return (
         <div className={styles.MerchandiseContainer}>
             <button className={styles.AddBtn}>ADD</button>
@@ -48,7 +51,22 @@ const Merchandise = ({ }: MerchandiseProps) => {
             </div>
 
             <div className={styles.RequestContainer}>
-                {/* Pending completed */}
+            <div>
+                    <span
+                        className={view === 'pending' ? styles.Active : ''}
+                        onClick={() => setView('pending')}
+                    >
+                        Pending
+                    </span>
+                    <span> / </span>
+                    <span
+                        className={view === 'completed' ? styles.Active : ''}
+                        onClick={() => setView('completed')}
+                    >
+                        Completed
+                    </span>
+                </div>
+                <RequestMerchandise status={view} />
             </div>
 
         </div>

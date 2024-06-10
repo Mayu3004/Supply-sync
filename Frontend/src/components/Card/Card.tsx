@@ -1,7 +1,7 @@
 import styles from "./Card.module.scss"; 
 import { CardProps } from "./Card.types.ts" 
  
-const Card = ({ title,description,price,photoUrl,quantity,points,onUpdate,onDelete}: CardProps) => { 
+const Card = ({ title,description,price,photoUrl,quantity,points,onUpdate,onDelete,children}: CardProps) => { 
     return (
         <div className={`${styles.CardContainer} ${styles.Card}`}>
           {photoUrl && <img className={styles.CardImage} src={photoUrl} alt={title} />}
@@ -11,6 +11,7 @@ const Card = ({ title,description,price,photoUrl,quantity,points,onUpdate,onDele
             {price && <p>Price: ${price}</p>}
             {quantity && <p>Quantity: {quantity}</p>}
             {points && <p>Points to earn: {points}</p>}
+            {children}
           </div>
             <div className={styles.ButtonContainer}>
               {onUpdate && <button onClick={onUpdate} className={styles.Button}>Update</button>}

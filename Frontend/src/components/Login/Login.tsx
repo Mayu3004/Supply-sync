@@ -2,27 +2,27 @@ import { useForm } from "react-hook-form";
 import styles from "./Login.module.scss"; 
 import { LoginData, LoginProps } from "./Login.types.ts" 
 import { LoginRequestHandler } from "../../services/login.services.ts";
-import { JwtPayload, jwtDecode } from "jwt-decode";
+// import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
- 
+
 const Login = ({}: LoginProps) => { 
     const { register, handleSubmit,formState:{errors}} = useForm<LoginData>()
     const navigate = useNavigate()
-
+    
     const onSubmit = async(data:LoginData) =>{
         console.log(data);
         const responseData =  await LoginRequestHandler(data);
         console.log(responseData);
-        localStorage.setItem("token",JSON.stringify(responseData))
-        const localToken = localStorage.getItem("token")
-        const decoded = jwtDecode<JwtPayload>(localToken)
-        console.log(localToken);
-        console.log(decoded.role);
-        if(decoded.role === "Manufacturer"){
-            navigate('/manufacturer')
-        }
+        localStorage.setItem("token",JSON.stringify(responseData.token))
+        localStorage.setItem("role",JSON.stringify(responseData.role))
+        const userRole = JSON.parse(localStorage.getItem("role") || '""')
+        if(userRole === "Manufacturer"){
+            console.log(userRole);
+            navigate("/manufacturer")
+        }   
         
     }
+
 
     return (
         <div className={styles.LoginContainer}>
@@ -37,7 +37,7 @@ const Login = ({}: LoginProps) => {
                             {...register("username", { required: true })}
                             placeholder="Username"
                         />
-                        {errors.username && <span className={styles.Error}>Email is required</span>}
+                        {errors.username && <span className={styles.Error}>Username is required</span>}
                     </div>
                     <div className={styles.FormGroup}>
                         <label htmlFor="password">Password</label>

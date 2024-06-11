@@ -1,16 +1,13 @@
+ 
 
 .ProductFormContainer {
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 1rem;
 
     .FormContainer {
-        margin-top: 1rem;
         text-align: center;
-        width: 100%;
     }
 
     h2 {
@@ -20,7 +17,7 @@
     }
 
     .Form {
-        padding: 2rem;
+        padding: 1.5rem;
         background-color: white;
         border: 1px solid black;
         border-radius: 4px;
@@ -29,7 +26,7 @@
         align-items: center;
         justify-content: center;
         margin-bottom: 1rem;
-        width: 80%;
+        width: 50%;
         height: 50%;
     }
 

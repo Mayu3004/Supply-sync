@@ -1,0 +1,32 @@
+ 
+.LoginPageContainer{
+    display: flex;
+    min-height: 100vh;
+    .LeftContainer{
+        flex: 1;
+        // padding: 1rem;
+        background-color: #2c74d6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .LogoImage{
+            height: 200px;
+            width: 200px;
+        }
+    }
+    .RightContainer{
+        flex:1;
+        .RightHeader{
+            padding: 1rem;
+            background-color: #f8faff;
+            text-align: center;
+            border: 1px solid #d2e3fc;   
+        }
+        .LoginContent{
+            margin-top: 10%;
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+        }
+    }
+} 

@@ -92,7 +92,7 @@
     align-items: center;
     background-color: white;
     border-radius: 4px;
-    width: 50%;
+    width: 40%;
     // margin-top: 1rem;
     // margin-left: 20rem;
     margin-bottom: 0.5rem;
@@ -102,14 +102,20 @@
 
 .CloseBtn {
     position: absolute;
-    padding: 0.1rem;
+    padding: 0.2rem;
     top: 10px;
     right: 10px;
     border-radius: 4px;
     background: none;
     border:none;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    color: rgb(223, 56, 56);
+    // color: rgb(223, 56, 56);
+    color: black;
+
+    &:hover{
+        background-color: rgb(223, 56, 56);
+        color: white;
+    }
 }
 

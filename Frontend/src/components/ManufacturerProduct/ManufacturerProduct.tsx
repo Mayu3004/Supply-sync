@@ -1,46 +1,45 @@
 import { useEffect, useState } from "react";
 import Card from "../Card/Card.tsx";
 import styles from "./ManufacturerProduct.module.scss";
-import { ManufacturerProductProps, Product } from "./ManufacturerProduct.types.ts"
+import { ManufacturerProductProps, Product } from "./ManufacturerProduct.types.ts";
 import { fetchProducts } from "../../services/manufacturerProducts.services.ts";
 import ProductForm from "../ProductForm/ProductForm.tsx";
 
 const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
-    const [isModalAdd, setIsModalAdd] = useState<boolean>(false)
-    const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false)
-    const [isModalDelete, setIsModalDelete] = useState<boolean>(false)
+    const [isModalAdd, setIsModalAdd] = useState<boolean>(false);
+    const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false);
+    const [isModalDelete, setIsModalDelete] = useState<boolean>(false);
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-    const [products, setProduts] = useState<Product[]>();
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [products, setProducts] = useState<Product[]>();
 
-    const onUpdate = (id:string) => {
+    const onUpdate = (id: string) => {
         console.log("Update");
-        setIsModalUpdate(true)
-        setSelectedProductId(id)
-        
-    }
-    const onDelete = (id:string) => {
-        console.log("Delete");
-        setIsModalDelete(true)
-        setSelectedProductId(id)
+        const product = products?.find(product => product.id === id) || null;
+        setSelectedProduct(product);
+        setIsModalUpdate(true);
+        setSelectedProductId(id);
+    };
 
-    }
+    const onDelete = (id: string) => {
+        console.log("Delete");
+        setIsModalDelete(true);
+        setSelectedProductId(id);
+    };
 
     useEffect(() => {
-
         const fetchProductHandler = async () => {
             const value = await fetchProducts();
-            setProduts(value)
-        }
+            setProducts(value.data);
+        };
 
-        fetchProductHandler()
-
-    }, [])
+        fetchProductHandler();
+    }, []);
 
     const handleClick = () => {
         setIsModalAdd(true);
+    };
 
-        // console.log("clicked");   
-    }
     const closeModal = () => {
         setIsModalAdd(false);
         setIsModalUpdate(false);
@@ -59,13 +58,13 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                 {products?.map((product, index) => (
                     <Card
                         key={index}
-                        title={product.name}
-                        description={product.description}
-                        price={product.price}
-                        quantity={product.quantity}
-                        photoUrl={product.photoUrl}
-                        onUpdate={()=>{onUpdate(product.id)}}
-                        onDelete={()=>{onDelete(product.id)}}
+                        title={product.productName}
+                        description={product.productDescription}
+                        price={product.productPrice}
+                        // quantity={product.quantity}
+                        photoUrl={product.productImage}
+                        onDelete={() => { onDelete(product.id) }}
+                        onUpdate={() => { onUpdate(product.id) }}
                     />
                 ))}
             </div>
@@ -73,7 +72,7 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <ProductForm isModalAdd={isModalAdd} />
+                        <ProductForm isModalAdd={isModalAdd} closeModal={closeModal} />
                     </div>
                 </div>
             )}
@@ -81,28 +80,29 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <ProductForm 
+                        <ProductForm
                             isModalUpdate={isModalUpdate}
-                            productID = {selectedProductId} 
-                         />
+                            productID={selectedProductId}
+                            product={selectedProduct}
+                            closeModal={closeModal}
+                        />
                     </div>
                 </div>
             )}
-
             {isModalDelete && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <ProductForm 
+                        <ProductForm
                             isModalDelete={isModalDelete}
-                            productID = {selectedProductId}
-                            closeModal = {closeModal} 
+                            productID={selectedProductId}
+                            closeModal={closeModal}
                         />
                     </div>
                 </div>
             )}
         </div>
     );
-}
+};
 
-export default ManufacturerProduct 
+export default ManufacturerProduct;

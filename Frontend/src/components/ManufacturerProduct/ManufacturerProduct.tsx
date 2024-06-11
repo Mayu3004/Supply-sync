@@ -6,15 +6,22 @@ import { fetchProducts } from "../../services/manufacturerProducts.services.ts";
 import ProductForm from "../ProductForm/ProductForm.tsx";
 
 const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
-    const [isModalOpen,setIsModalOpen] = useState<boolean>(false)
+    const [isModalAdd, setIsModalAdd] = useState<boolean>(false)
+    const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false)
+    const [isModalDelete, setIsModalDelete] = useState<boolean>(false)
+    const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
     const [products, setProduts] = useState<Product[]>();
 
-    const onUpdate = () => {
+    const onUpdate = (id:string) => {
         console.log("Update");
-
+        setIsModalUpdate(true)
+        setSelectedProductId(id)
+        
     }
-    const onDelete = () => {
+    const onDelete = (id:string) => {
         console.log("Delete");
+        setIsModalDelete(true)
+        setSelectedProductId(id)
 
     }
 
@@ -29,23 +36,25 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
 
     }, [])
 
-    const handleClick = () =>{
-        setIsModalOpen(true);
+    const handleClick = () => {
+        setIsModalAdd(true);
 
         // console.log("clicked");   
     }
     const closeModal = () => {
-        setIsModalOpen(false);
+        setIsModalAdd(false);
+        setIsModalUpdate(false);
+        setIsModalDelete(false);
     };
 
     return (
         <div className={styles.ManufacturerProductContainer}>
-            <button 
+            <button
                 className={styles.AddBtn}
-                onClick={handleClick}    
+                onClick={handleClick}
             >
-                    ADD
-                </button>
+                ADD
+            </button>
             <div className={styles.DataContainer}>
                 {products?.map((product, index) => (
                     <Card
@@ -55,16 +64,40 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                         price={product.price}
                         quantity={product.quantity}
                         photoUrl={product.photoUrl}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
+                        onUpdate={()=>{onUpdate(product.id)}}
+                        onDelete={()=>{onDelete(product.id)}}
                     />
                 ))}
             </div>
-            {isModalOpen && (
+            {isModalAdd && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <ProductForm />
+                        <ProductForm isModalAdd={isModalAdd} />
+                    </div>
+                </div>
+            )}
+            {isModalUpdate && (
+                <div className={styles.ModalView}>
+                    <div className={styles.ModalContent}>
+                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <ProductForm 
+                            isModalUpdate={isModalUpdate}
+                            productID = {selectedProductId} 
+                         />
+                    </div>
+                </div>
+            )}
+
+            {isModalDelete && (
+                <div className={styles.ModalView}>
+                    <div className={styles.ModalContent}>
+                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <ProductForm 
+                            isModalDelete={isModalDelete}
+                            productID = {selectedProductId}
+                            closeModal = {closeModal} 
+                        />
                     </div>
                 </div>
             )}

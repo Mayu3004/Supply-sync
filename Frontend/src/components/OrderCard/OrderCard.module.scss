@@ -1,0 +1,111 @@
+.OrderCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 240px;
+    background-color: #ffffff;
+    color: #324b73;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .CardInfo {
+        flex: 10;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.2rem;
+    }
+
+    ul {
+        padding: 1rem;
+        max-height: 10rem;
+        overflow-y: scroll;
+        list-style-type: none;
+        //   padding: 0;
+        margin: 0 0 1rem 0;
+        border-top: 1px solid #e0e0e0;
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:before {
+                content: "•";
+                color: #015aff;
+                font-weight: bold;
+                display: inline-block;
+                width: 1rem;
+                margin-right: 0.5rem;
+            }
+
+            .ProductName {
+                flex: 1;
+                font-weight: bold;
+            }
+
+            .Quantity {
+                color: #757575;
+            }
+        }
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #81b1f5;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #3385f8;
+            border-radius: 4px;
+            &:hover {
+                background-color: #aaa;
+            }
+        }
+    }
+
+    .ButtonContainer {
+        flex: 1;
+        .Button {
+            padding: 0.4rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .EditBtn {
+            border: 1px solid #015aff;
+
+            &:hover {
+                background-color: #2c74d6;
+                color: white;
+            }
+        }
+
+        .DeleteBtn {
+            border: 1px solid #ff0101;
+
+            &:hover {
+                background-color: #d62c2c;
+                color: white;
+            }
+        }
+    }
+}

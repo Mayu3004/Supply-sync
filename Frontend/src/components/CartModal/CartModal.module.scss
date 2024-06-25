@@ -1,0 +1,78 @@
+ 
+.Modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ModalContent {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.CartItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.ButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.Button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.CancelBtn {
+    border: 1px solid #ff0101;
+      &:hover {
+        background-color: #d62c2c;
+        color: white;
+      }
+}
+
+.ConfirmBtn {
+    border: 1px solid #015aff;
+
+      &:hover {
+        background-color: #2c74d6;
+        color: white;
+      }
+}
+
+
+.CloseBtn {
+    position: absolute;
+    padding: 0.2rem;
+    top: 0px;
+    right: 0.8rem;
+    border-radius: 4px;
+    background: none;
+    border:none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    // color: rgb(223, 56, 56);
+    color: black;
+
+    &:hover{
+        background-color: rgb(223, 56, 56);
+        color: white;
+    }
+}

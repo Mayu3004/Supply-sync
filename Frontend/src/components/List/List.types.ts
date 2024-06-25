@@ -1,7 +1,8 @@
 export interface ListProps {
     name: string;
     contact: string;
-    sales?: number;
+    points?: number;
+    email?:string;
     onUpdate?: () => void;
     onDelete?: () => void;
 } 

@@ -7,5 +7,7 @@ export interface CardProps {
     points?: number;
     onUpdate?: () => void;
     onDelete?: () => void;
+    onRedeem?:() =>void;
+    onAddToCart?:(quantity:number)=>void;
     children?: React.ReactNode;
 } 

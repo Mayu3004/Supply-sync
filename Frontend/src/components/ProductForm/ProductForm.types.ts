@@ -19,10 +19,10 @@ export interface ProductFormData extends z.infer<typeof productFormSchema> { }
 //     quantity?:number;
 // }
 export interface ProductFormProps {
-  product?: ProductFormData
+  product?: ProductFormData | null
   isModalAdd?: boolean
   isModalUpdate?: boolean
   isModalDelete?: boolean
-  productID?: string
+  productID?: string | null;
   closeModal?: () => void
 } 

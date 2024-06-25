@@ -1,51 +1,56 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import styles from "./Distributor.module.scss";
-import { DistributorData, DistributorProps } from "./Distributor.types.ts"
-import { fetchDistributor } from "../../services/manufacturer.services.ts";
-import List from "../List/List.tsx";
-import DistributorForm from "../DistributorForm/DistributorForm.tsx";
+import { DistributorData, DistributorProps } from "./Distributor.types";
+import { fetchDistributor } from "../../services/manufacturer.services";
+import List from "../List/List";
+import DistributorForm from "../DistributorForm/DistributorForm";
+// import { distributorReducer, initialDistributorState } from "../../reducers/distributorReducer";
+import { distributorReducer,initialDistributorState } from "./Distributor.state";
 
 const Distributor = ({ }: DistributorProps) => {
-    const [distributors, setDistributors] = useState<DistributorData[]>();
-    const [isModalAdd,setIsModalAdd] = useState<boolean>(false);
-    const [isModalUpdate,setIsModalUpdate] = useState<boolean>(false);
-    const [isModalDelete,setIsModalDelete] = useState<boolean>(false);
+    const [state, dispatch] = useReducer(distributorReducer, initialDistributorState);
 
-    
-    const onUpdate = () =>{
+    const { distributors, isModalAdd, isModalUpdate, isModalDelete, selectedDistributorId, selectedDistributor } = state;
+
+    const onUpdate = (id: string) => {
         console.log("distributor update");
-        setIsModalUpdate(true)
-        
-    }
+        const distributor = distributors?.find(distributor => distributor._id === id) || null;
 
-    const onDelete = () =>{
+        dispatch({ type: 'SET_SELECTED_DISTRIBUTOR', payload: distributor });
+        dispatch({ type: 'SET_SELECTED_DISTRIBUTOR_ID', payload: id });
+        dispatch({ type: 'SET_IS_MODAL_UPDATE', payload: true });
+    };
+
+    const onDelete = (id: string) => {
         console.log("distributor deleted");
-        setIsModalDelete(true)
-        
-    }
+        dispatch({ type: 'SET_IS_MODAL_DELETE', payload: true });
+        dispatch({ type: 'SET_SELECTED_DISTRIBUTOR_ID', payload: id });
+    };
 
-    const handleClick = () =>{
-        setIsModalAdd(true)
-    }
-    const closeModal = () =>{
-        setIsModalAdd(false);
-        setIsModalUpdate(false);
-        setIsModalDelete(false);
-    }
+    const handleClick = () => {
+        dispatch({ type: 'SET_IS_MODAL_ADD', payload: true });
+    };
+
+    const closeModal = () => {
+        dispatch({ type: 'SET_IS_MODAL_ADD', payload: false });
+        dispatch({ type: 'SET_IS_MODAL_UPDATE', payload: false });
+        dispatch({ type: 'SET_IS_MODAL_DELETE', payload: false });
+    };
+
     useEffect(() => {
-
         const fetchDistributorHandler = async () => {
             const value = await fetchDistributor();
-            setDistributors(value)
-        }
+            console.log(value.data);
 
-        fetchDistributorHandler()
+            dispatch({ type: 'SET_DISTRIBUTORS', payload: value.data });
+        };
 
-    }, [])
+        fetchDistributorHandler();
+    }, []);
 
     return (
         <div className={styles.DistributorContainer}>
-            <button 
+            <button
                 className={styles.AddBtn}
                 onClick={handleClick}
             > <strong>+</strong> ADD
@@ -54,11 +59,11 @@ const Distributor = ({ }: DistributorProps) => {
                 {distributors?.map((distributor, index) => (
                     <List
                         key={index}
-                        name={distributor.distributorName}
-                        contact = {distributor.contactNumber}
-                        sales = {distributor.salesGenerated}
-                        onUpdate={onUpdate}
-                        onDelete={onDelete}
+                        name={distributor.name}
+                        contact={distributor.mobileNumber}
+                        points={distributor.totalPoints}
+                        onUpdate={() => { onUpdate(distributor._id) }}
+                        onDelete={() => { onDelete(distributor._id) }}
                     />
                 ))}
             </div>
@@ -66,12 +71,41 @@ const Distributor = ({ }: DistributorProps) => {
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <DistributorForm isModalAdd={isModalAdd} />
+                        <DistributorForm isModalAdd={isModalAdd} closeModal={closeModal} dispatch = {dispatch}/>
+                    </div>
+                </div>
+            )}
+
+            {isModalUpdate && (
+                <div className={styles.ModalView}>
+                    <div className={styles.ModalContent}>
+                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <DistributorForm
+                            isModalUpdate={isModalUpdate}
+                            distributorID={selectedDistributorId}
+                            distributor={selectedDistributor}
+                            closeModal={closeModal}
+                            dispatch = {dispatch}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {isModalDelete && (
+                <div className={styles.ModalView}>
+                    <div className={styles.ModalContent}>
+                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <DistributorForm
+                            isModalDelete={isModalDelete}
+                            distributorID={selectedDistributorId}
+                            closeModal={closeModal}
+                            dispatch = {dispatch}
+                        />
                     </div>
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default Distributor 
+export default Distributor;

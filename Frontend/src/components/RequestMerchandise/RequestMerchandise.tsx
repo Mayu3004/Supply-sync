@@ -29,6 +29,7 @@ const RequestMerchandise = ({status}: RequestMerchandiseProps) => {
     };
 
     return (
+        <>
         <div className={styles.RequestMerchandiseContainer}>
             {merchandises.map((merchandise) => (
                 <Card
@@ -46,6 +47,7 @@ const RequestMerchandise = ({status}: RequestMerchandiseProps) => {
                 </Card>
             ))}
         </div>
+        </>
     );
 } 
  

@@ -1,9 +1,9 @@
  export interface MerchandiseData {
-    // id: number;
-    itemName: string;
-    details: string;
-    points: number;
-    photoUrl: string;
+   _id:string
+   merchandiseName: string;
+   merchandiseDescription: string;
+   pointsRequired: number;
+   merchandiseImage: string;
   }
  
  export interface MerchandiseProps {

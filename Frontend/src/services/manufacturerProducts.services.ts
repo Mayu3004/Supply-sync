@@ -1,39 +1,37 @@
+import { InventoryFormData } from "../components/InventoryForm/InventoryForm.types";
 import { ProductFormData } from "../components/ProductForm/ProductForm.types";
 import Instance from "./instance.services";
 
 
 
 
-export const fetchProducts = async () =>{
+export const fetchProducts = async () => {
   try {
-    const token = localStorage.getItem('token');
-    const parsedToken = token ? JSON.parse(token) : null;
-    console.log(parsedToken);
-
-    const response = await Instance.get("product/allproducts",  {
-      headers: {
-        Authorization: `Bearer ${parsedToken}`
-      }
-    });
+    const response = await Instance.get("product/allproducts");
+    console.log(response.data);
+    
     return response.data;
   } catch (error) {
     console.error("Error fetching productDetail:", error);
   }
 }
 
+export const fetchManufacturerInventory = async () => {
+  try {
+    const response = await Instance.get("inventory/getinventory");
+    // console.log(response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Inventory:", error);
+  }
+}
+
 export const addProducts = async (data: ProductFormData) => {
-  console.log(data);
+  // console.log(data);
 
   try {
-    const token = localStorage.getItem('token');
-    const parsedToken = token ? JSON.parse(token) : null;
-    console.log(parsedToken);
-
-    const response = await Instance.post("product/add-product", data, {
-      headers: {
-        Authorization: `Bearer ${parsedToken}`
-      }
-    });
+    const response = await Instance.post("product/add-product", data)
     return response.data;
   } catch (error) {
     console.error("Error sending productDetail:", error);
@@ -41,23 +39,27 @@ export const addProducts = async (data: ProductFormData) => {
 }
 
 export const updateProduct = async (productId: string | null, data: Partial<ProductFormData>) => {
-  const token = localStorage.getItem('token');
+
   try {
-    const response = await Instance.put(`/product/update/${productId}`, data, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const response = await Instance.put(`/product/update/${productId}`);
     return response.data;
   } catch (error) {
     console.error('Error updating product:', error);
   }
 };
 
-export const deleteProduct = async (productId: string | null) => {
-  const token = localStorage.getItem('token');
+export const updateManufacturerInventory = async (productId: string | null, data: Partial<InventoryFormData>) => {
+  const IData = {...data,productId:productId}
   try {
-    const response = await Instance.delete(`/product/delete/${productId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const response = await Instance.put(`/inventory/update`,IData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating innventory:', error);
+  }
+};
+export const deleteProduct = async (productId: string | null) => {
+  try {
+    const response = await Instance.delete(`/product/delete/${productId}`)
     return response.data;
   } catch (error) {
     console.error('Error deleting product:', error);

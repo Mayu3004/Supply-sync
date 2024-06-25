@@ -1,0 +1,181 @@
+// .ProductOrdersContainer {
+//     padding: 1rem;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 1rem;
+//     height: 100vh;
+//     position: relative;
+//   }
+  
+//   .ButtonsContainer {
+//     display: flex;
+//     gap: 1rem;
+//   }
+  
+//   .Button {
+//     padding: 0.4rem 1.2rem;
+//     border: none;
+//     border-radius: 4px;
+//     background-color: white;
+//     color: #324b73;
+//     cursor: pointer;
+//     transition: background-color 0.3s ease;
+  
+//     &.Active {
+//       background-color: #2c74d6;
+//       color: white;
+//     }
+//   }
+  
+//   .OrdersContainer {
+//     display: flex;
+//     flex-wrap: wrap; /* Allows cards to wrap to the next line if necessary */
+//     gap: 1rem; /* Adjust the gap between cards */
+//     justify-content: flex-start; /* Align cards from left to right */
+//     background-color: #f1f5fd;
+//     overflow-y: auto;
+//     border-radius: 4px;
+//     box-shadow: 0px 0px 8px 2px #e6e8f4;
+//     padding: 1rem;
+//   }
+  
+  
+.ProductOrdersContainer {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100vh;
+    position: relative;
+  }
+  
+  .ButtonsContainer {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .Button {
+    padding: 0.4rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    background-color: white;
+    color: #324b73;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    &.Active {
+      background-color: #2c74d6;
+      color: white;
+    }
+  }
+  
+  .OrdersContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to wrap to the next line if necessary */
+    gap: 1rem; /* Adjust the gap between cards */
+    justify-content: flex-start; /* Align cards from left to right */
+    background-color: #f1f5fd;
+    overflow-y: auto;
+    border-radius: 4px;
+    box-shadow: 0px 0px 8px 2px #e6e8f4;
+    padding: 1rem;
+  }
+  
+  .OrderCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 240px;
+    background-color: #ffffff;
+    color: #324b73;
+    height: 100%; /* Ensures each card takes full height of its container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  
+    .CardInfo {
+      flex: 1; /* Allows the info section to grow or shrink as needed */
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem; /* Increased margin to separate from button */
+    }
+  
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      border-top: 1px solid #e0e0e0;
+  
+      li {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e0e0e0;
+  
+        &:last-child {
+          border-bottom: none;
+        }
+  
+        &:before {
+          content: "•";
+          color: #015aff;
+          font-weight: bold;
+          display: inline-block;
+          width: 1rem;
+          margin-right: 0.5rem;
+        }
+  
+        .ProductName {
+          flex: 1;
+          font-weight: bold;
+        }
+  
+        .Quantity {
+          color: #757575;
+        }
+      }
+    }
+  
+    .ButtonsContainer {
+      display: flex;
+      justify-content: space-between;
+  
+     
+    }
+  }
+  .Button {
+    padding: 0.4rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .EditBtn {
+    border: 1px solid #015aff;
+
+    &:hover {
+      background-color: #2c74d6;
+      color: white;
+    }
+  }
+
+  .DeleteBtn {
+    border: 1px solid #ff0101;
+
+    &:hover {
+      background-color: #d62c2c;
+      color: white;
+    }
+  }
+  

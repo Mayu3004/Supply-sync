@@ -1,4 +1,4 @@
-import { addProducts } from '../../services/manufacturerProducts.services';
+import { addProducts, deleteProduct, fetchProducts, updateProduct } from '../../services/manufacturerProducts.services';
 import styles from './ProductForm.module.scss';
 import { ProductFormProps, ProductFormData } from './ProductForm.types';
 import { useForm } from 'react-hook-form';
@@ -21,14 +21,25 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
         addProducts(data);
     };
 
-    const onSubmitUpdate = (data: ProductFormData) => {
+    const onSubmitUpdate = async(data: ProductFormData) => {
         console.log(productID, data);
+        if(!productID) throw "ProductId undefined"
+        await updateProduct(productID,data);
+        await fetchProducts();
+        closeModal()
     };
 
-    const onClickDelete = () => {
+    const onClickDelete = async() => {
         console.log(productID, "delete");
+        //api delete
+        if(!productID) throw "productId undefined"
+        await deleteProduct(productID);
         closeModal();
     };
+
+    const onCancel = () => {
+        closeModal()
+    }
 
     if (isModalAdd) {
         return (
@@ -70,7 +81,11 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
                         ></textarea>
                         {errors.productDescription && <span className={styles.Error}>{errors.productDescription.message}</span>}
                     </div>
-                    <button type="submit" className={styles.SubmitButton}>SAVE</button>
+                    <div className={styles.ButtonContainer}>
+                        <button onClick={onCancel} className={`${styles.Button} ${styles.DeleteBtn}`}>CANCEL</button>
+                        <button type='submit' className={`${styles.Button} ${styles.EditBtn}`}>SAVE</button>
+                    </div>
+                    {/* <button type="submit" className={`${styles.Button} ${styles.EditBtn}`}>SAVE</button> */}
                 </form>
             </div>
         );
@@ -116,7 +131,11 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
                         ></textarea>
                         {errors.productDescription && <span className={styles.Error}>{errors.productDescription.message}</span>}
                     </div>
-                    <button type="submit" className={`${styles.Button} ${styles.EditBtn}`}>SAVE</button>
+                    <div className={styles.ButtonContainer}>
+                        <button onClick={onCancel} className={`${styles.Button} ${styles.DeleteBtn}`}>CANCEL</button>
+                        <button type='submit' className={`${styles.Button} ${styles.EditBtn}`}>SAVE</button>
+                    </div>
+                    {/* <button type="submit" className={`${styles.Button} ${styles.EditBtn}`}>SAVE</button> */}
                 </form>
             </div>
         );
@@ -126,10 +145,15 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
         return (
             <div className={styles.ProductFormContainer}>
                 <div className={styles.FormGroup}>
-                    <h2>Are you sure?</h2>
                 </div>
-                <button onClick={onClickDelete} className={`${styles.Button} ${styles.DeleteBtn}`}>CONFIRM</button>
-                <button onClick={closeModal} className={`${styles.Button} ${styles.EditBtn}`}>CANCEL</button>
+                <div className={styles.Form}>
+                    <h2>Are you sure?</h2>
+                    <div className={styles.ButtonContainer}>
+                        <button onClick={onCancel} className={`${styles.Button} ${styles.DeleteBtn}`}>CANCEL</button>
+                        <button onClick={onClickDelete} className={`${styles.Button} ${styles.EditBtn}`}>CONFIRM</button>
+                    </div>
+                </div>
+
             </div>
         );
     }

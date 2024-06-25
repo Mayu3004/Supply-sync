@@ -1,49 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import Card from "../Card/Card.tsx";
 import styles from "./ManufacturerProduct.module.scss";
 import { ManufacturerProductProps, Product } from "./ManufacturerProduct.types.ts";
 import { fetchProducts } from "../../services/manufacturerProducts.services.ts";
 import ProductForm from "../ProductForm/ProductForm.tsx";
+import { initialManufacturerProductState,manufacturerProductReducer } from "./Manufacturer.state.ts";
 
 const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
-    const [isModalAdd, setIsModalAdd] = useState<boolean>(false);
-    const [isModalUpdate, setIsModalUpdate] = useState<boolean>(false);
-    const [isModalDelete, setIsModalDelete] = useState<boolean>(false);
-    const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [products, setProducts] = useState<Product[]>();
+    const [state, dispatch] = useReducer(manufacturerProductReducer, initialManufacturerProductState);
 
     const onUpdate = (id: string) => {
         console.log("Update");
-        const product = products?.find(product => product.id === id) || null;
-        setSelectedProduct(product);
-        setIsModalUpdate(true);
-        setSelectedProductId(id);
+        const product = state.products.find(product => product._id === id) || null;
+        dispatch({ type: 'SET_MODAL_UPDATE', payload: { isOpen: true, product, productId: id } });
     };
 
     const onDelete = (id: string) => {
         console.log("Delete");
-        setIsModalDelete(true);
-        setSelectedProductId(id);
+        dispatch({ type: 'SET_MODAL_DELETE', payload: { isOpen: true, productId: id } });
     };
 
     useEffect(() => {
         const fetchProductHandler = async () => {
             const value = await fetchProducts();
-            setProducts(value.data);
+            dispatch({ type: 'SET_PRODUCTS', payload: value.data });
         };
 
         fetchProductHandler();
     }, []);
 
     const handleClick = () => {
-        setIsModalAdd(true);
+        dispatch({ type: 'SET_MODAL_ADD', payload: true });
     };
 
     const closeModal = () => {
-        setIsModalAdd(false);
-        setIsModalUpdate(false);
-        setIsModalDelete(false);
+        dispatch({ type: 'SET_MODAL_ADD', payload: false });
+        dispatch({ type: 'SET_MODAL_UPDATE', payload: { isOpen: false, product: null, productId: null } });
+        dispatch({ type: 'SET_MODAL_DELETE', payload: { isOpen: false, productId: null } });
     };
 
     return (
@@ -55,7 +48,7 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                 ADD
             </button>
             <div className={styles.DataContainer}>
-                {products?.map((product, index) => (
+                {state.products.map((product, index) => (
                     <Card
                         key={index}
                         title={product.productName}
@@ -63,39 +56,39 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                         price={product.productPrice}
                         // quantity={product.quantity}
                         photoUrl={product.productImage}
-                        onDelete={() => { onDelete(product.id) }}
-                        onUpdate={() => { onUpdate(product.id) }}
+                        onDelete={() => { onDelete(product._id) }}
+                        onUpdate={() => { onUpdate(product._id) }}
                     />
                 ))}
             </div>
-            {isModalAdd && (
+            {state.isModalAdd && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <ProductForm isModalAdd={isModalAdd} closeModal={closeModal} />
+                        <ProductForm isModalAdd={state.isModalAdd} closeModal={closeModal} />
                     </div>
                 </div>
             )}
-            {isModalUpdate && (
+            {state.isModalUpdate && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
                         <ProductForm
-                            isModalUpdate={isModalUpdate}
-                            productID={selectedProductId}
-                            product={selectedProduct}
+                            isModalUpdate={state.isModalUpdate}
+                            productID={state.selectedProductId}
+                            product={state.selectedProduct}
                             closeModal={closeModal}
                         />
                     </div>
                 </div>
             )}
-            {isModalDelete && (
+            {state.isModalDelete && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
                         <ProductForm
-                            isModalDelete={isModalDelete}
-                            productID={selectedProductId}
+                            isModalDelete={state.isModalDelete}
+                            productID={state.selectedProductId}
                             closeModal={closeModal}
                         />
                     </div>

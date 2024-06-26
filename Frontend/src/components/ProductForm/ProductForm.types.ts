@@ -2,7 +2,7 @@
 import { z } from "zod"
 
 export const productFormSchema = z.object({
-  productName: z.string().optional(),
+  productName: z.string().trim().optional(),
   productPrice: z.number().optional(),
   productImage: z.string().optional(),
   productDescription: z.string().optional(),
@@ -19,10 +19,10 @@ export interface ProductFormData extends z.infer<typeof productFormSchema> { }
 //     quantity?:number;
 // }
 export interface ProductFormProps {
-  product?: ProductFormData
+  product?: ProductFormData | null
   isModalAdd?: boolean
   isModalUpdate?: boolean
   isModalDelete?: boolean
-  productID?: string
+  productID?: string | null;
   closeModal?: () => void
 } 

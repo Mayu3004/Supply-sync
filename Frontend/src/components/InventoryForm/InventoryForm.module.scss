@@ -1,0 +1,101 @@
+ 
+
+.ProductFormContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+
+    .FormContainer {
+        margin-top: 1rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 1rem; 
+        font-size: 2rem;
+    }
+
+    .Form {
+        padding: 2rem;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        width: 80%;
+        height: 50%;
+
+        .ButtonContainer {
+
+            display: flex;
+            gap: 4rem;
+            // justify-content: space-between;
+        
+            //  margin-top: 1rem;
+            .Button {
+              padding: 0.4rem 1.2rem;
+              border: none;
+              border-radius: 4px;
+              background-color: white;
+              color: black;
+              cursor: pointer;
+              transition: background-color 0.3s ease;       
+            }
+            .EditBtn{
+             border: 1px solid #015aff;
+             &:hover {
+               background-color: #2c74d6;
+               color: white;
+             }
+            }
+            .DeleteBtn{
+             // background-color: #d62c2c;
+             border: 1px solid #ff0101;
+             &:hover {
+               background-color: #d62c2c;
+               color: white;
+             }
+            }
+          }
+    }
+
+    .FormGroup {
+        width: 100%;
+        margin-bottom: 1rem;
+
+        label {
+            text-align: left;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            display: block;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        input{
+            width: 100%;
+            background-color: #f8faff;
+            padding: 0.2rem;
+            border-radius: 4px;
+            border: 1px solid #f8faff;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .Error {
+        padding: 0.2rem;
+        border-radius: 2px;
+        border: 1px solid rgb(232, 84, 84);
+        color: rgb(232, 84, 84);
+        font-size: 0.875rem;
+        margin-top: 0.25rem; 
+    }
+}

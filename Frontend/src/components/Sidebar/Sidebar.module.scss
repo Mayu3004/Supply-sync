@@ -1,6 +1,31 @@
  
-.SidebarContainer {
+// .SidebarContainer {
     
+//     width: 200px; 
+//     padding: 20px; 
+// }
+
+// .SidebarItem {
+//     display: block;
+//     padding: 1rem 0.5rem; 
+//     color: #4a6084; 
+//     text-decoration: none; 
+//     font-size: 1.2rem;
+//     font-weight: bold;
+// }
+
+// .SidebarItem:hover {
+//     background-color: #e4f2fe; 
+//     border-radius: 4px;
+//     transform: scale(1.01)
+// }
+// .SidebarItem:active{
+//     background-color: #e4f2fe; 
+//     color: #2196f3;
+// }
+
+
+.SidebarContainer {
     width: 200px; 
     padding: 20px; 
 }
@@ -12,14 +37,42 @@
     text-decoration: none; 
     font-size: 1.2rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .SidebarItem:hover {
     background-color: #e4f2fe; 
     border-radius: 4px;
-    transform: scale(1.01)
+    transform: scale(1.01);
 }
-.SidebarItem:active{
+
+.SidebarItem:active {
+    background-color: #e4f2fe; 
+    color: #2196f3;
+}
+
+.SubItemsContainer {
+    padding-left: 0.9rem; 
+    margin-top: 0.1rem; 
+    border-left: 2px solid #e4f2fe;
+}
+
+.SubItem {
+    display: block;
+    padding: 0.5rem 0.5rem; 
+    color: #4a6084; 
+    text-decoration: none; 
+    font-size: 1rem; 
+    font-weight: normal;
+}
+
+.SubItem:hover {
+    background-color: #e4f2fe; 
+    border-radius: 4px;
+    transform: scale(1.01);
+}
+
+.SubItem:active {
     background-color: #e4f2fe; 
     color: #2196f3;
 }

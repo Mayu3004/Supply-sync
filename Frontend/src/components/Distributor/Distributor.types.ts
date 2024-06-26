@@ -1,8 +1,8 @@
 export interface DistributorData {
-    distributorId: string,
-    distributorName: string,
-    contactNumber: string,
-    salesGenerated: number
+    _id: string,
+    name: string,
+    mobileNumber: string,
+    totalPoints: number
 
 }
 

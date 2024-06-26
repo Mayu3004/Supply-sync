@@ -1,25 +1,37 @@
 import { useForm } from "react-hook-form";
-import styles from "./Login.module.scss"; 
-import { LoginData, LoginProps } from "./Login.types.ts" 
+import styles from "./Login.module.scss";
+import { LoginData, LoginProps } from "./Login.types.ts"
 import { LoginRequestHandler } from "../../services/login.services.ts";
 // import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-const Login = ({}: LoginProps) => { 
-    const { register, handleSubmit,formState:{errors}} = useForm<LoginData>()
+const Login = ({ }: LoginProps) => {
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginData>()
     const navigate = useNavigate()
-    
-    const onSubmit = async(data:LoginData) =>{
-        console.log(data);
-        const responseData =  await LoginRequestHandler(data);
-        console.log(responseData);
-        localStorage.setItem("token",JSON.stringify(responseData.token))
-        localStorage.setItem("role",JSON.stringify(responseData.role))
-        const userRole = JSON.parse(localStorage.getItem("role") || '""')
-        if(userRole === "Manufacturer"){
-            console.log(userRole);
-            navigate("/manufacturer")
-        }   
+    const [loginError, setLoginError] = useState<string>("");
+
+    const onSubmit = async (data: LoginData) => {
+        try {
+            console.log(data);
+            const responseData = await LoginRequestHandler(data);
+            console.log(responseData);
+            localStorage.setItem("token", JSON.stringify(responseData.token))
+            localStorage.setItem("role", JSON.stringify(responseData.role))
+            localStorage.setItem("userId", JSON.stringify(responseData.userId))
+            const userRole = JSON.parse(localStorage.getItem("role") || '""')
+            if (userRole === "Manufacturer") {
+                console.log(userRole);
+                navigate("/manufacturer")
+            }
+            else if (userRole === "Distributor") {
+                navigate("/distributor")
+            }
+        }
+        catch(error:any){
+            setLoginError(error.message)
+        }
+           
         
     }
 
@@ -38,6 +50,8 @@ const Login = ({}: LoginProps) => {
                             placeholder="Username"
                         />
                         {errors.username && <span className={styles.Error}>Username is required</span>}
+                        {/* {errors.username && <p className={styles.Error}>{errors.username?.message}</p>} */}
+
                     </div>
                     <div className={styles.FormGroup}>
                         <label htmlFor="password">Password</label>
@@ -55,12 +69,14 @@ const Login = ({}: LoginProps) => {
                     </div>
                     <button className={styles.LoginBtn}>Login</button>
                 </form>
+                {loginError && <div className={styles.Error}>{loginError}</div>}
             </div>
+            
         </div>
     );
-} 
- 
-export default Login 
+}
+
+export default Login
 
 
 

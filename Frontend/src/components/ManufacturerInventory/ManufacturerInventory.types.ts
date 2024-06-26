@@ -6,7 +6,6 @@ import { Product } from "../ManufacturerProduct/ManufacturerProduct.types";
 //     product:Product,
 //     quantity?:number
 // }
- // ManufacturerInventory.types.ts
 
 export interface IProduct {
     _id: string;
@@ -18,7 +17,7 @@ export interface IProduct {
 }
 
 export interface InventoryProduct {
-    product: Product;
+    product: IProduct;
     quantity: number;
 }
 

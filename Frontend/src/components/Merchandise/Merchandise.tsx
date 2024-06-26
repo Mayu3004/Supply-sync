@@ -1,39 +1,49 @@
 
-
 import { useEffect, useState } from "react";
 import Card from "../Card/Card.tsx";
 import styles from "./Merchandise.module.scss";
 import { MerchandiseData, MerchandiseProps } from "./Merchandise.types.ts"
-import { fetchMerchandise } from "../../services/manufacturer.Merchandise.ts";
+import { deleteMerchandise, fetchMerchandise } from "../../services/manufacturer.Merchandise.ts";
 import MerchandiseForm from "../MerchandiseForm/MerchandiseForm.tsx";
 import { Outlet } from "react-router-dom";
+import Pagination from "../Pagination/Pagination.tsx";
 
 const Merchandise = ({ }: MerchandiseProps) => {
     const [merchandises, setMerchandises] = useState<MerchandiseData[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [selectedMerchandise, setSelectedMerchandise] = useState<MerchandiseData | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(10);
 
     useEffect(() => {
-        const fetchMerchandiseHandler = async () => {
-            try {
-                const value = await fetchMerchandise();
-                setMerchandises(value);
-            } catch (error) {
-                console.error("Error fetching merchandise:", error);
-            }
-        }
-
-        fetchMerchandiseHandler();
+        fetchMerchandiseHandler(currentPage);
     }, []);
+
+    const fetchMerchandiseHandler = async (page:number) => {
+        try {
+            const value = await fetchMerchandise(page);
+            setMerchandises(value);
+        } catch (error) {
+            console.error("Error fetching merchandise:", error);
+        }
+    }
 
     const handleUpdate = (merchandise: MerchandiseData) => {
         setSelectedMerchandise(merchandise);
         setModalOpen(true);
     };
 
-    const handleDelete = (id: string) => {
+    const handleDelete = async(id: string) => {
        
         console.log("Delete merchandise with ID:", id);
+
+        try {
+            const value = await deleteMerchandise(id);
+            console.log(value);
+            
+        } catch (error) {
+            console.error("Error fetching merchandise:", error);
+        }
         
         // setMerchandises(prevMerchandises => prevMerchandises.filter(merchandise => merchandise._id !== id));
     };
@@ -41,6 +51,10 @@ const Merchandise = ({ }: MerchandiseProps) => {
     const closeModal = () => {
         setModalOpen(false);
         setSelectedMerchandise(null);
+    };
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        fetchMerchandiseHandler(page);
     };
 
     const handleSubmit = (formData: MerchandiseData) => {
@@ -91,9 +105,15 @@ const Merchandise = ({ }: MerchandiseProps) => {
                     </div>
                 </div>
             )}
-           
+           <div className={styles.Footer}>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
+            </div>
         </div>
-   
+    
         
     );
 }

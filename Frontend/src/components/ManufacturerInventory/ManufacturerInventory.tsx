@@ -28,7 +28,7 @@ const ManufacturerInventory = ({ }: ManufacturerInventoryProps) => {
         };
         fetchProductHandler();
     },[])
-    // console.log(state.products);
+   
     
     return (
         <div className={styles.ManufacturerProductContainer}>

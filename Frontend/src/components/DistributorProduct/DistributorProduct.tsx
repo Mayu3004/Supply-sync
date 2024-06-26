@@ -1,5 +1,4 @@
 
-
 import { useEffect, useReducer } from "react";
 import styles from "./DistributorProduct.module.scss";
 import { distributorInventoryReducer, initialDistributorInventoryState } from "./DistributorProduct.state";
@@ -50,6 +49,10 @@ const DistributorProduct = ({ }: DistributorProductProps) => {
         fetchInventoryHandler();
     }, []);
 
+    console.log(state.products);
+    
+    
+    
     return (
         <div className={styles.ManufacturerProductContainer}>
             <button className={styles.AddBtn} onClick={handleClick}>
@@ -62,7 +65,7 @@ const DistributorProduct = ({ }: DistributorProductProps) => {
                         title={inventoryProduct.product.productName}
                         description={inventoryProduct.product.productDescription}
                         price={inventoryProduct.product.productPrice}
-                        // quantity={inventoryProduct.quantity}
+                        quantity={inventoryProduct.quantity}
                         photoUrl={inventoryProduct.product.productImage}
                         onAddToCart={(quantity: number) => { onAddToCart(inventoryProduct.product, quantity) }}
                     />

@@ -30,7 +30,7 @@ export const LogoutRequestHandler = async (data: string) => {
               Authorization: `Bearer ${parsedToken}`
             }
           });
-        console.log("logout",response.data.data);
+        // console.log("logout",response.data.data);
           return response.data.data
     }
     catch (error) {

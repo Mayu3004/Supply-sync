@@ -1,13 +1,16 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Card from "../Card/Card.tsx";
 import styles from "./ManufacturerProduct.module.scss";
 import { ManufacturerProductProps, Product } from "./ManufacturerProduct.types.ts";
 import { fetchProducts } from "../../services/manufacturerProducts.services.ts";
 import ProductForm from "../ProductForm/ProductForm.tsx";
 import { initialManufacturerProductState,manufacturerProductReducer } from "./Manufacturer.state.ts";
+import Pagination from "../Pagination/Pagination.tsx";
 
 const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
     const [state, dispatch] = useReducer(manufacturerProductReducer, initialManufacturerProductState);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalPages, setTotalPages] = useState<number>(10);
 
     const onUpdate = (id: string) => {
         console.log("Update");
@@ -20,14 +23,19 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
         dispatch({ type: 'SET_MODAL_DELETE', payload: { isOpen: true, productId: id } });
     };
 
+    const fetchProductHandler = async (currentPage:number) => {
+        const value = await fetchProducts(currentPage);
+        dispatch({ type: 'SET_PRODUCTS', payload: value.data });
+    };
     useEffect(() => {
-        const fetchProductHandler = async () => {
-            const value = await fetchProducts();
-            dispatch({ type: 'SET_PRODUCTS', payload: value.data });
-        };
 
-        fetchProductHandler();
+        fetchProductHandler(currentPage);
     }, []);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        fetchProductHandler(page)
+    };
 
     const handleClick = () => {
         dispatch({ type: 'SET_MODAL_ADD', payload: true });
@@ -60,7 +68,17 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                         onUpdate={() => { onUpdate(product._id) }}
                     />
                 ))}
+
+                
+                
             </div>
+            <div className={styles.Footer}>
+                <Pagination 
+                        currentPage={currentPage} 
+                        totalPages={totalPages} 
+                        onPageChange={handlePageChange} 
+                    />
+                </div>
             {state.isModalAdd && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>

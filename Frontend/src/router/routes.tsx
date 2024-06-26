@@ -10,12 +10,18 @@ import { Navigate } from "react-router-dom";
 import ManufacturerInventory from "../components/ManufacturerInventory/ManufacturerInventory";
 import DistributorPage from "../pages/DistributorPage/DistributorPage";
 import DistributorProduct from "../components/DistributorProduct/DistributorProduct";
-import RequestMerchandise from "../components/RequestMerchandise/RequestMerchandise";
+// import RequestMerchandise from "../components/RequestMerchandise/RequestMerchandise";
 import ProductOrders from "../components/ProductOrders/ProductOrders";
 import ParentMerchandise from "../components/ParentMerchandise/ParentMerchandise";
 import Customer from "../components/Customer/Customer";
 import ParentRequests from "../components/ParentRequests/ParentRequests";
 import CustomerMerchandise from "../components/CustomerMerchandise/CustomerMerchandise";
+import DistributorSales from "../components/DistributorSales/DistributorSales";
+import ParentManufacturerRequests from "../components/ParentManufacturerRequests/ParentManufacturerRequests";
+import TopPerformers from "../components/TopPerformers/TopPerformers";
+import TopProductSales from "../components/TopProductSales/TopProductSales";
+import RequestedMerchandise from "../components/RequestedMerchandise/RequestedMerchandise";
+import Profile from "../components/Profile/Profile";
 
 type predicate = () => boolean;
 
@@ -61,7 +67,7 @@ const routes = [
             },
             {
                 path: "reports",
-                element: <Random />,
+                element: <ParentManufacturerRequests />,
                 children: [
                     {
                         path: "",
@@ -69,11 +75,11 @@ const routes = [
                     },
                     {
                         path:"top-moving-products",
-                        element:<Random/>
+                        element:<TopProductSales/>
                     },
                     {
                         path:"top-distributors",
-                        element:<Random/>
+                        element:<TopPerformers/>
                     },
                     {
                         path:"sales-chart",
@@ -95,7 +101,7 @@ const routes = [
                     },
                     {
                         path: 'requestedmerchandise',
-                        element:<ProductOrders/>
+                        element:<RequestedMerchandise/>
                     }
                 ]
             },
@@ -109,7 +115,7 @@ const routes = [
             },
             {
                 path: "profile",
-                element: <Random />
+                element: <Profile />
             }
         ]
     },
@@ -150,11 +156,11 @@ const routes = [
             },
             {
                 path: "sales",
-                element: <Random />
+                element: <DistributorSales />
             },
             {
                 path: "profile",
-                element: <Random />
+                element: <Profile />
             }
         ]
     }

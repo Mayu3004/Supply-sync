@@ -1,63 +1,6 @@
 
-// import { InventoryProduct } from "../ManufacturerInventory/ManufacturerInventory.types";
-// import { Product } from "../ManufacturerProduct/ManufacturerProduct.types";
-
 import { InventoryProduct } from "../ManufacturerInventory/ManufacturerInventory.types";
 import { Product } from "../ManufacturerProduct/ManufacturerProduct.types";
-
-// export interface CartItem {
-//     product: InventoryProduct['product'];
-//     quantity: number;
-// }
-
-// export interface DistributorInventoryState {
-//     products: InventoryProduct[];
-//     cart: CartItem[];
-// }
-
-// export type DistributorInventoryAction =
-//     | { type: 'SET_PRODUCTS'; payload: InventoryProduct[] }
-//     | { type: 'ADD_TO_CART'; payload: { product: Product; quantity: number } };
-
-// export const initialDistributorInventoryState: DistributorInventoryState = {
-//     products: [],
-//     cart: []
-// };
-
-// export const distributorInventoryReducer = (
-//     state: DistributorInventoryState,
-//     action: DistributorInventoryAction
-// ): DistributorInventoryState => {
-//     switch (action.type) {
-//         case 'SET_PRODUCTS':
-//             return { ...state, products: action.payload };
-//         case 'ADD_TO_CART':
-//             const existingCartItem = state.cart.find(
-//                 item => item.product._id === action.payload.product._id
-//             );
-
-//             if (existingCartItem) {
-//                 return {
-//                     ...state,
-//                     cart: state.cart.map(item =>
-//                         item.product._id === action.payload.product._id
-//                             ? { ...item, quantity: item.quantity + action.payload.quantity }
-//                             : item
-//                     )
-//                 };
-//             }
-
-//             return {
-//                 ...state,
-//                 cart: [...state.cart, { product: action.payload.product, quantity: action.payload.quantity }]
-//             };
-//         default:
-//             return state;
-//     }
-// };
-
-
-
 
 export interface CartItem {
     product: InventoryProduct['product'];

@@ -4,6 +4,10 @@
    merchandiseDescription: string;
    pointsRequired: number;
    merchandiseImage: string;
+   username?:string
+   status?:string;
+   distributorId?:string;
+   merchandiseId?:string;
   }
  
  export interface MerchandiseProps {

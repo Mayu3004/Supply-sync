@@ -2,7 +2,7 @@
 import { z } from "zod"
 
 export const productFormSchema = z.object({
-  productName: z.string().optional(),
+  productName: z.string().trim().optional(),
   productPrice: z.number().optional(),
   productImage: z.string().optional(),
   productDescription: z.string().optional(),

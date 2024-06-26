@@ -1,11 +1,16 @@
 import { addProducts, deleteProduct, fetchProducts, updateProduct } from '../../services/manufacturerProducts.services';
 import styles from './ProductForm.module.scss';
-import { ProductFormProps, ProductFormData } from './ProductForm.types';
+import { ProductFormProps, ProductFormData, productFormSchema } from './ProductForm.types';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, product, closeModal }: ProductFormProps) => {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<ProductFormData>();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<ProductFormData>(
+        {
+            resolver:zodResolver(productFormSchema)
+        }
+    );
 
     useEffect(() => {
         if (product) {
@@ -25,7 +30,7 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
         console.log(productID, data);
         if(!productID) throw "ProductId undefined"
         await updateProduct(productID,data);
-        await fetchProducts();
+        // await fetchProducts();
         closeModal()
     };
 

@@ -10,8 +10,8 @@ const InventoryForm = ({ isModalUpdate, closeModal, productID }: InventoryFormPr
     const onSubmitUpdate = async (data: InventoryFormData) => {
         if (!productID) throw "ProductID indefined"
         await updateManufacturerInventory(productID, data);
-        // await fetchManufacturerInventory();
         closeModal()
+        
     }
     const onCancel = () => {
         closeModal()

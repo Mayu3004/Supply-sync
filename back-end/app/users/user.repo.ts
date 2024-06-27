@@ -36,6 +36,12 @@ export const addProductToInventory = async (newProduct: IInventorySchema) => {
     return isAdded;
 };
 
+export const removeProductFromInventory = async (productId: string) =>
+    userModel.updateMany(
+        { "inventory.productId": productId },
+        { $pull: { inventory: { productId: productId } } }
+    );
+
 export const getAllDistributors = (page: number, limit: number) =>
     userModel
         .find({ role: "Distributor" }, { password: 0 })
@@ -130,4 +136,5 @@ export default {
     updateMerchandiseRequestStatus,
     getAllDistributors,
     deleteUserById,
+    removeProductFromInventory,
 };

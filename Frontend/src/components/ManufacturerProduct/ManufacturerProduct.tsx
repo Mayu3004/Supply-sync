@@ -1,40 +1,43 @@
-import { useEffect, useReducer, useState } from "react";
-import Card from "../Card/Card.tsx";
-import styles from "./ManufacturerProduct.module.scss";
-import { ManufacturerProductProps, Product } from "./ManufacturerProduct.types.ts";
-import { fetchProducts } from "../../services/manufacturerProducts.services.ts";
-import ProductForm from "../ProductForm/ProductForm.tsx";
-import { initialManufacturerProductState,manufacturerProductReducer } from "./Manufacturer.state.ts";
-import Pagination from "../Pagination/Pagination.tsx";
 
-const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
-    const [state, dispatch] = useReducer(manufacturerProductReducer, initialManufacturerProductState);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(10);
+import { useEffect } from "react";
+import Card from "../Card/Card";
+import styles from "./ManufacturerProduct.module.scss";
+import { fetchProducts } from "../../services/manufacturerProducts.services";
+import ProductForm from "../ProductForm/ProductForm";
+import Pagination from "../Pagination/Pagination";
+import { ManufacturerProductProvider, useManufacturerProductContext } from "./ManufacturerProductContext";
+import { ToastContainer } from "react-toastify";
+
+const ManufacturerProduct = () => {
+    const { state, dispatch } = useManufacturerProductContext();
 
     const onUpdate = (id: string) => {
-        console.log("Update");
         const product = state.products.find(product => product._id === id) || null;
         dispatch({ type: 'SET_MODAL_UPDATE', payload: { isOpen: true, product, productId: id } });
     };
 
     const onDelete = (id: string) => {
-        console.log("Delete");
         dispatch({ type: 'SET_MODAL_DELETE', payload: { isOpen: true, productId: id } });
     };
 
-    const fetchProductHandler = async (currentPage:number) => {
+    const fetchProductHandler = async (currentPage: number) => {
         const value = await fetchProducts(currentPage);
         dispatch({ type: 'SET_PRODUCTS', payload: value.data });
     };
-    useEffect(() => {
 
-        fetchProductHandler(currentPage);
-    }, []);
+    useEffect(() => {
+        fetchProductHandler(state.currentPage);
+    }, [state.currentPage]);
+
+    useEffect(() => {
+        if (state.refreshProducts) {
+            fetchProductHandler(state.currentPage);
+            dispatch({ type: 'SET_REFRESH_PRODUCTS', payload: false });
+        }
+    }, [state.refreshProducts, state.currentPage]);
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        fetchProductHandler(page)
+        dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
     };
 
     const handleClick = () => {
@@ -49,10 +52,7 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
 
     return (
         <div className={styles.ManufacturerProductContainer}>
-            <button
-                className={styles.AddBtn}
-                onClick={handleClick}
-            >
+            <button className={styles.AddBtn} onClick={handleClick}>
                 ADD
             </button>
             <div className={styles.DataContainer}>
@@ -62,35 +62,36 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                         title={product.productName}
                         description={product.productDescription}
                         price={product.productPrice}
-                        // quantity={product.quantity}
                         photoUrl={product.productImage}
-                        onDelete={() => { onDelete(product._id) }}
-                        onUpdate={() => { onUpdate(product._id) }}
+                        onDelete={() => onDelete(product._id)}
+                        onUpdate={() => onUpdate(product._id)}
                     />
                 ))}
-
-                
-                
             </div>
             <div className={styles.Footer}>
-                <Pagination 
-                        currentPage={currentPage} 
-                        totalPages={totalPages} 
-                        onPageChange={handlePageChange} 
-                    />
-                </div>
+                <Pagination
+                    currentPage={state.currentPage}
+                    totalPages={state.totalPages}
+                    onPageChange={handlePageChange}
+                />
+            </div>
             {state.isModalAdd && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
-                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <button className={styles.CloseBtn} onClick={closeModal}>
+                            X
+                        </button>
                         <ProductForm isModalAdd={state.isModalAdd} closeModal={closeModal} />
                     </div>
+                    <ToastContainer/>
                 </div>
             )}
             {state.isModalUpdate && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
-                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <button className={styles.CloseBtn} onClick={closeModal}>
+                            X
+                        </button>
                         <ProductForm
                             isModalUpdate={state.isModalUpdate}
                             productID={state.selectedProductId}
@@ -98,12 +99,15 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
                             closeModal={closeModal}
                         />
                     </div>
+                    <ToastContainer/>
                 </div>
             )}
             {state.isModalDelete && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
-                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
+                        <button className={styles.CloseBtn} onClick={closeModal}>
+                            X
+                        </button>
                         <ProductForm
                             isModalDelete={state.isModalDelete}
                             productID={state.selectedProductId}
@@ -116,4 +120,11 @@ const ManufacturerProduct = ({ }: ManufacturerProductProps) => {
     );
 };
 
-export default ManufacturerProduct;
+const ManufacturerProductWrapper = () => (
+    <ManufacturerProductProvider>
+        <ManufacturerProduct />
+    </ManufacturerProductProvider>
+);
+
+export default ManufacturerProductWrapper;
+

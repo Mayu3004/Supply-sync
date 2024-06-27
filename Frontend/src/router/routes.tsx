@@ -22,6 +22,8 @@ import TopPerformers from "../components/TopPerformers/TopPerformers";
 import TopProductSales from "../components/TopProductSales/TopProductSales";
 import RequestedMerchandise from "../components/RequestedMerchandise/RequestedMerchandise";
 import Profile from "../components/Profile/Profile";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import ManufacturerProductWrapper from "../components/ManufacturerProduct/ManufacturerProduct";
 
 type predicate = () => boolean;
 
@@ -30,9 +32,9 @@ const canActivate = (
     guards: predicate[],
     to: string = "/"
 ) => {
-    // console.log("hello");
+   
     return () => {
-        // console.log(to);
+       
         if (!guards.every((guard) => guard())) return <Navigate to={to} />;
 
         return <Component />;
@@ -48,10 +50,11 @@ const routes = [
         path: '/manufacturer',
         Component: canActivate(ManufacturerPage, [GUARDS.isLoggedIn, GUARDS.grantAccessTo(["Manufacturer"])]),
         // element:<ManufacturerPage/>,
+        errorElement:<ErrorPage/>,
         children: [
             {
                 path: "",
-                element: <ManufacturerProduct />
+                element: <ManufacturerProductWrapper />
             },
             {
                 path: "products",
@@ -123,6 +126,7 @@ const routes = [
         path: '/distributor',
         Component: canActivate(DistributorPage, [GUARDS.isLoggedIn, GUARDS.grantAccessTo(["Distributor"])]),
         // element:<ManufacturerPage/>,
+        errorElement:<ErrorPage />,
         children: [
             {
                 path: "",
@@ -163,7 +167,12 @@ const routes = [
                 element: <Profile />
             }
         ]
+    },
+    {
+        path: '*',
+        element: <ErrorPage /> 
     }
+
     // ,{
     //     path:"/manufacturer/products",
     //     element:<Random/>

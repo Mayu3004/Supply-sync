@@ -14,7 +14,7 @@ const TopPerformers = ({ }: TopPerformersProps) => {
     const fetchPerformerHandler = async () => {
         if (startDate && endDate) {
             const value = await fetchPerformers(startDate, endDate);
-            console.log(value);
+           
             if (value) {
                 setPerformers(value.data);
                 setIsFetched(true);

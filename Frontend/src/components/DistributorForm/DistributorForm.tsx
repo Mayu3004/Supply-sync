@@ -9,7 +9,7 @@ const DistributorForm = ({ isModalAdd, isModalDelete, isModalUpdate, closeModal,
 
     const onSubmit = async(data: DistributorFormData) => {
         data.role = 'Distributor'
-        console.log(data);
+      
         addDistributor(data);
         const updatedDistributors = await fetchDistributor();
         dispatch({ type: 'SET_DISTRIBUTORS', payload: updatedDistributors.data });
@@ -27,11 +27,11 @@ const DistributorForm = ({ isModalAdd, isModalDelete, isModalUpdate, closeModal,
     }, [distributor, setValue]);
 
     const onSubmitUpdate = async(data: DistributorFormData) => {
-        console.log(distributorID, data);
+       
         if(!distributorID) throw "DistributorId undefined"
         await updateDistributor(distributorID,data);
         const updatedDistributors = await fetchDistributor();
-        console.log(updatedDistributors);
+       
         
         dispatch({ type: 'SET_DISTRIBUTORS', payload: updatedDistributors.data });
         closeModal()
@@ -41,7 +41,7 @@ const DistributorForm = ({ isModalAdd, isModalDelete, isModalUpdate, closeModal,
     }
     
     const onClickDelete = async() => {
-        console.log(distributorID, "delete");
+       
         //api delete
         if(!distributorID) throw "productId undefined"
         await deleteDistributor(distributorID);

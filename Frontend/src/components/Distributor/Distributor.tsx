@@ -38,12 +38,12 @@ const Distributor = ({ }: DistributorProps) => {
     };
 
     const fetchDistributorHandler = async (page: number) => {
-        console.log("hit");
+       
         
         try {
             const response = await fetchDistributor(page);
 
-            console.log(response.data);
+    
             
             dispatch({ type: 'SET_DISTRIBUTORS', payload: response.data });
             // setTotalPages(response.data.totalPages);  // Update totalPages state

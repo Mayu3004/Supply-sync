@@ -49,7 +49,7 @@ const DistributorProduct = ({ }: DistributorProductProps) => {
         fetchInventoryHandler();
     }, []);
 
-    console.log(state.products);
+    
     
     
     

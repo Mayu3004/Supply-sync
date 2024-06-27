@@ -1,8 +1,7 @@
-
 import styles from './Pagination.module.scss';
 import { PaginationProps } from './Pagination.types';
 
-const Pagination = ({ currentPage, totalPages, onPageChange }:PaginationProps) => {
+const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
     const handlePrevious = () => {
         if (currentPage > 1) {
             onPageChange(currentPage - 1);

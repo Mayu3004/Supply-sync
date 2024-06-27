@@ -7,14 +7,20 @@ export interface ManufacturerProductState {
     isModalDelete: boolean;
     selectedProductId: string | null;
     selectedProduct: Product | null;
+    refreshProducts:boolean;
     products: Product[];
+    currentPage: number;
+    totalPages: number;
 }
 
 export type ManufacturerProductAction =
     | { type: 'SET_MODAL_ADD'; payload: boolean }
     | { type: 'SET_MODAL_UPDATE'; payload: { isOpen: boolean, product: Product | null, productId: string | null } }
     | { type: 'SET_MODAL_DELETE'; payload: { isOpen: boolean, productId: string | null } }
-    | { type: 'SET_PRODUCTS'; payload: Product[] };
+    | { type: 'SET_PRODUCTS'; payload: Product[] }
+    | { type: 'SET_CURRENT_PAGE'; payload: number }
+    | { type: 'SET_TOTAL_PAGES'; payload: number }
+    |{type:'SET_REFRESH_PRODUCTS';payload:boolean}
 
 export const initialManufacturerProductState: ManufacturerProductState = {
     isModalAdd: false,
@@ -22,7 +28,10 @@ export const initialManufacturerProductState: ManufacturerProductState = {
     isModalDelete: false,
     selectedProductId: null,
     selectedProduct: null,
-    products: []
+    refreshProducts: false,
+    products: [],
+    currentPage: 1,
+    totalPages: 10
 };
 
 export const manufacturerProductReducer = (
@@ -38,6 +47,12 @@ export const manufacturerProductReducer = (
             return { ...state, isModalDelete: action.payload.isOpen, selectedProductId: action.payload.productId };
         case 'SET_PRODUCTS':
             return { ...state, products: action.payload };
+        case 'SET_CURRENT_PAGE':
+            return { ...state, currentPage: action.payload };
+        case 'SET_TOTAL_PAGES':
+            return { ...state, totalPages: action.payload };
+            case 'SET_REFRESH_PRODUCTS':
+                return { ...state, refreshProducts: action.payload };
         default:
             return state;
     }

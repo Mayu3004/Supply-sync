@@ -43,7 +43,7 @@ const CustomerMerchandise = ({ }: CustomerMerchandiseProps) => {
         const fetchMerchandiseHandler = async () => {
             try {
                 const value = await fetchMerchandise();
-                // console.log(value.data);
+                
 
                 setMerchandises(value);
             } catch (error) {

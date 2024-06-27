@@ -6,7 +6,7 @@ export const fetchDistributor = async (page:number) =>{
     try {
         
         const response = await Instance.get(`user/distributors/${page}/6`);
-        console.log(response.data);
+       
          
         return response.data;
       } catch (error) {
@@ -14,7 +14,7 @@ export const fetchDistributor = async (page:number) =>{
       }
 }
 export const addDistributor = async (data: DistributorFormData) => {
-    console.log(data);
+   
   
     try {  
       const response = await Instance.post("users/create-user", data);
@@ -48,7 +48,7 @@ export const addDistributor = async (data: DistributorFormData) => {
     try {
         
         const response = await Instance.get("customer/allcustomers");
-        console.log(response.data);
+       
          
         return response.data;
       } catch (error) {
@@ -65,7 +65,7 @@ export const fetchPerformers = async (startDate:string,endDate:string) =>{
         enddate: endDate
       }
     });
-    console.log(response);
+  
      
     return response.data;
   } catch (error) {
@@ -82,7 +82,7 @@ export const fetchTopProducts = async (startDate:string,endDate:string)=>{
         enddate: endDate
       }
     });
-    console.log(response);
+    
      
     return response.data;
   } catch (error) {

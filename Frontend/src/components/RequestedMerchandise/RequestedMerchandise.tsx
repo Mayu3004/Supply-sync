@@ -41,7 +41,7 @@ const RequestedMerchandise = ({}: RequestedMerchandiseProps) => {
         setCurrentPage(page);
         fetchData(status,page)
     };
-    console.log(merchandises);
+   
     
 
     return (

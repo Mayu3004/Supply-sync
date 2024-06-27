@@ -11,7 +11,7 @@ const ManufacturerInventory = ({ }: ManufacturerInventoryProps) => {
     const [state,dispatch] = useReducer(manufacturerInventoryReducer,initialManufacturerInventoryState);
 
     const onUpdate = (id:string) =>{
-        console.log("update");
+        
         
         dispatch({type:"SET_MODAL_UPDATE",payload:{isOpen:true,productId:id}})
     }
@@ -28,13 +28,14 @@ const ManufacturerInventory = ({ }: ManufacturerInventoryProps) => {
         };
         fetchProductHandler();
     },[])
+    
    
     
     return (
         <div className={styles.ManufacturerProductContainer}>
             
             <div className={styles.DataContainer}>
-                {state.products.map((product, index) => (
+                {state.products.filter(product=> product.product !==null).map((product, index) => (
                     <Card
                         key={index}
                         title={product.product.productName}

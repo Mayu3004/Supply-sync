@@ -55,7 +55,7 @@ const ProductOrders = ({ }: ProductOrdersProps) => {
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-        console.log("state.status,page",state.status,page)
+   
         fetchData(state.status,page)
     };
 

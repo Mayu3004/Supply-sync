@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { InventoryFormData } from "../components/InventoryForm/InventoryForm.types";
 import { ProductFormData } from "../components/ProductForm/ProductForm.types";
 import Instance from "./instance.services";
@@ -19,6 +20,7 @@ export const fetchProducts = async (currentPage:number) => {
 export const fetchManufacturerInventory = async () => {
   try {
     const response = await Instance.get("inventory/getinventory");
+   
    
     
     return response.data;
@@ -60,9 +62,10 @@ export const updateManufacturerInventory = async (productId: string | null, data
 export const deleteProduct = async (productId: string | null) => {
   try {
     const response = await Instance.delete(`/product/delete/${productId}`)
+    toast.success("Product deleted successfully")
     return response.data;
   } catch (error) {
-    console.error('Error deleting product:', error);
+    toast.error('Error deleting product:');
   }
 };
 

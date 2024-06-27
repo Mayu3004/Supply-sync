@@ -2,13 +2,15 @@ import { useEffect, useReducer } from "react";
 import Card from "../Card/Card.tsx";
 import styles from "./ManufacturerInventory.module.scss";
 import { ManufacturerInventoryProps } from "./ManufacturerInventory.types.ts"
-import { fetchManufacturerInventory, fetchProducts } from "../../services/manufacturerProducts.services.ts";
+import { fetchManufacturerInventory } from "../../services/manufacturerProducts.services.ts";
 import { initialManufacturerInventoryState, manufacturerInventoryReducer } from "./ManufacturerInventory.state.ts";
 import InventoryForm from "../InventoryForm/InventoryForm.tsx";
+import { ManufacturerInventoryProvider, useManufacturerInventoryContext } from "./ManufacturerInventoryContext.tsx";
 
 const ManufacturerInventory = ({ }: ManufacturerInventoryProps) => {
 
-    const [state,dispatch] = useReducer(manufacturerInventoryReducer,initialManufacturerInventoryState);
+    // const [state,dispatch] = useReducer(manufacturerInventoryReducer,initialManufacturerInventoryState);
+    const { state, dispatch } = useManufacturerInventoryContext();
 
     const onUpdate = (id:string) =>{
         
@@ -22,13 +24,20 @@ const ManufacturerInventory = ({ }: ManufacturerInventoryProps) => {
         }})
     }
     useEffect (()=>{
-        const fetchProductHandler = async ()=>{
-            const value = await fetchManufacturerInventory();
-            dispatch({type:'SET_PRODUCTS',payload:value.data})
-        };
         fetchProductHandler();
     },[])
-    
+    const fetchProductHandler = async ()=>{
+        const value = await fetchManufacturerInventory();
+        dispatch({type:'SET_PRODUCTS',payload:value.data})
+    };
+
+    useEffect(() => {
+        if (state.refreshProducts) {
+            fetchProductHandler();
+            dispatch({ type: 'SET_REFRESH_PRODUCTS', payload: false });
+        }
+    }, [state.refreshProducts]);
+
    
     
     return (
@@ -64,4 +73,10 @@ const ManufacturerInventory = ({ }: ManufacturerInventoryProps) => {
     )
 }
 
-export default ManufacturerInventory 
+const ManufacturerInventoryWrapper = () => (
+    <ManufacturerInventoryProvider>
+        <ManufacturerInventory />
+    </ManufacturerInventoryProvider>
+);
+
+export default ManufacturerInventoryWrapper;

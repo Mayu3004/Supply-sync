@@ -59,7 +59,7 @@ const DistributorProduct = ({ }: DistributorProductProps) => {
                 ORDER
             </button>
             <div className={styles.DataContainer}>
-                {state.products.map((inventoryProduct, index) => (
+                {state.products.filter(product=>product.product!==null).map((inventoryProduct, index) => (
                     <Card
                         key={index}
                         title={inventoryProduct.product.productName}

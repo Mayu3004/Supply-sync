@@ -2,7 +2,8 @@ import axios from "axios";
 
 const Instance = axios.create({
   
-    baseURL: 'https://1240-115-160-223-174.ngrok-free.app/',
+    baseURL: 'http://localhost:3000/',
+    // baseURL: 'https://1240-115-160-223-174.ngrok-free.app/',
     headers: {
         "ngrok-skip-browser-warning": "skip-browser-warning",
         // Authorization: 

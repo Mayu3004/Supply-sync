@@ -1,22 +1,35 @@
 import { useForm } from "react-hook-form";
 import styles from "./InventoryForm.module.scss";
-import { InventoryFormData, InventoryFormProps } from "./InventoryForm.types.ts"
+import { InventoryFormData, InventoryFormProps, inventoryFormSchema } from "./InventoryForm.types.ts"
 import { fetchManufacturerInventory, updateManufacturerInventory } from "../../services/manufacturerProducts.services.ts";
+import { useManufacturerInventoryContext } from "../ManufacturerInventory/ManufacturerInventoryContext.tsx";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
 const InventoryForm = ({ isModalUpdate, closeModal, productID }: InventoryFormProps) => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<InventoryFormData>();
+    const { register, handleSubmit, formState: { errors } } = useForm<InventoryFormData>({
+        resolver: zodResolver(inventoryFormSchema)
+    });
+    const { dispatch } = useManufacturerInventoryContext();
 
     const onSubmitUpdate = async (data: InventoryFormData) => {
-        if (!productID) throw "ProductID indefined"
-        await updateManufacturerInventory(productID, data);
-        // await fetchManufacturerInventory();
-        closeModal()
+        try {
+            if (!productID) throw new Error("ProductID indefined")
+            await updateManufacturerInventory(productID, data);
+            toast.success('Product updated successfully');
+            dispatch({ type: 'SET_REFRESH_PRODUCTS', payload: true });
+            closeModal()
+        } catch (error) {
+            toast.error('Error updating product');
+        }
+
+
     }
     const onCancel = () => {
         closeModal()
     }
-    if(isModalUpdate){
+    if (isModalUpdate) {
         return (
             <div className={styles.ProductFormContainer}>
                 <h2>Update Product</h2>
@@ -38,7 +51,7 @@ const InventoryForm = ({ isModalUpdate, closeModal, productID }: InventoryFormPr
             </div>
         )
     }
-    
+
 }
 
 export default InventoryForm 

@@ -11,7 +11,7 @@ import ManufacturerInventory from "../components/ManufacturerInventory/Manufactu
 import DistributorPage from "../pages/DistributorPage/DistributorPage";
 import DistributorProduct from "../components/DistributorProduct/DistributorProduct";
 // import RequestMerchandise from "../components/RequestMerchandise/RequestMerchandise";
-import ProductOrders from "../components/ProductOrders/ProductOrders";
+import   ProductOrderWrapper  from "../components/ProductOrders/ProductOrders";
 import ParentMerchandise from "../components/ParentMerchandise/ParentMerchandise";
 import Customer from "../components/Customer/Customer";
 import ParentRequests from "../components/ParentRequests/ParentRequests";
@@ -24,6 +24,7 @@ import RequestedMerchandise from "../components/RequestedMerchandise/RequestedMe
 import Profile from "../components/Profile/Profile";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import ManufacturerProductWrapper from "../components/ManufacturerProduct/ManufacturerProduct";
+import ManufacturerInventoryWrapper from "../components/ManufacturerInventory/ManufacturerInventory";
 
 type predicate = () => boolean;
 
@@ -62,11 +63,11 @@ const routes = [
             },
             {
                 path: "inventory",
-                element: <ManufacturerInventory />
+                element: <ManufacturerInventoryWrapper />
             },
             {
                 path: "orders",
-                element: <ProductOrders />
+                element: <ProductOrderWrapper />
             },
             {
                 path: "reports",
@@ -146,11 +147,11 @@ const routes = [
                 children: [
                     {
                         path:'',
-                        element:<ProductOrders/>
+                        element:<Random/>
                     },
                     {
                         path:'orders',
-                        element:<ProductOrders/>
+                        element:<Random/>
                     },
                     {
                         path:'merchandise',

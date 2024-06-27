@@ -1,19 +1,28 @@
 import { useForm } from "react-hook-form";
 import styles from "./DistributorForm.module.scss";
 import { addDistributor, fetchDistributor,updateDistributor,deleteDistributor } from "../../services/manufacturer.services.ts";
-import { DistributorFormData, DistributorFormProps } from "./DistributorForm.types.ts"
+import { DistributorFormData, DistributorFormProps, distributorFormSchema } from "./DistributorForm.types.ts"
 import { useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
 const DistributorForm = ({ isModalAdd, isModalDelete, isModalUpdate, closeModal,distributorID,distributor,dispatch}: DistributorFormProps) => {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<DistributorFormData>();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<DistributorFormData>({
+        resolver:zodResolver(distributorFormSchema)
+    });
 
     const onSubmit = async(data: DistributorFormData) => {
-        data.role = 'Distributor'
-      
+        try {
+            data.role = 'Distributor'
         addDistributor(data);
         const updatedDistributors = await fetchDistributor();
+        toast.success('Product added successfully');
         dispatch({ type: 'SET_DISTRIBUTORS', payload: updatedDistributors.data });
         closeModal()
+        } catch (error) {
+            
+        }
+        
         
     }
 

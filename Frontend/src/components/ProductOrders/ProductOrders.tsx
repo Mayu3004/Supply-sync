@@ -1,35 +1,35 @@
 
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import styles from "./ProductOrders.module.scss";
-import { ProductOrdersProps, Order, Distributor, Product } from "./ProductOrders.types";
+import { ProductOrdersProps, Order } from "./ProductOrders.types";
 import OrderCard from "../OrderCard/OrderCard";
-// import { fetchDistributor } from "../../services/manufacturer.services";
-// import { fetchProducts } from "../../services/manufacturerProducts.services";
 import { completeOrder, fetchOrders } from "../../services/DistributorProduct.services";
 import { ordersReducer, initialState } from "./ProductOrderReducer";
-import Pagination from "../Pagination/Pagination"; // Import Pagination component
+import Pagination from "../Pagination/Pagination"; 
+import { toast } from "react-toastify";
+import { ProductOrderProvider } from "./ProductOrdersContext";
 
 const ProductOrders = ({ }: ProductOrdersProps) => {
     const [state, dispatch] = useReducer(ordersReducer, initialState);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(10);
 
     useEffect(() => {
-        fetchData("pending", currentPage);
+        fetchData("pending", state.currentPage);
     }, []);
 
     const fetchData = async (status: string, page: number) => {
         try {
             const fetchedOrders = await fetchOrders(status, page);
-            dispatch({ type: 'FETCH_ORDERS_SUCCESS', payload: fetchedOrders.data });
+            dispatch({ type: 'FETCH_ORDERS_SUCCESS', payload: { orders: fetchedOrders.data, totalPages: 10} });
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
+
     const handleCompleteOrder = async (orderId: string) => {
         try {
             await completeOrder(orderId);
             dispatch({ type: 'COMPLETE_ORDER', payload: orderId });
+            toast.success("Order Updated successfully")
         } catch (error) {
             console.error('Error completing order:', error);
         }
@@ -37,7 +37,7 @@ const ProductOrders = ({ }: ProductOrdersProps) => {
 
     const handleViewCompleted = async () => {
         try {
-            await fetchData("completed", currentPage);
+            await fetchData("completed", state.currentPage);
             dispatch({ type: 'SET_STATUS', payload: 'completed' });
         } catch (error) {
             console.error('Error fetching completed orders:', error);
@@ -46,7 +46,7 @@ const ProductOrders = ({ }: ProductOrdersProps) => {
 
     const handleRefreshOrders = async () => {
         try {
-            await fetchData("pending", currentPage);
+            await fetchData("pending", state.currentPage);
             dispatch({ type: 'SET_STATUS', payload: 'pending' });
         } catch (error) {
             console.error('Error refreshing orders:', error);
@@ -54,9 +54,8 @@ const ProductOrders = ({ }: ProductOrdersProps) => {
     };
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-   
-        fetchData(state.status,page)
+        dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
+        fetchData(state.status, page);
     };
 
     return (
@@ -79,17 +78,25 @@ const ProductOrders = ({ }: ProductOrdersProps) => {
                 ))}
             </div>
             <div className={styles.Footer}>
-                <Pagination 
-                    currentPage={currentPage} 
-                    totalPages={totalPages} 
-                    onPageChange={handlePageChange} 
+                <Pagination
+                    currentPage={state.currentPage}
+                    totalPages={state.totalPages}
+                    onPageChange={handlePageChange}
                 />
             </div>
         </div>
     );
 };
 
-export default ProductOrders;
+// export default ProductOrders;
+
+const ProductOrderWrapper = () => (
+    <ProductOrderProvider>
+        < ProductOrders/>
+    </ProductOrderProvider>
+);
+
+export default ProductOrderWrapper;
 
 
 

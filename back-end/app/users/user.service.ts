@@ -245,6 +245,14 @@ export const deleteUserById = async (userId: String, deletedBy: String) => {
     }
 };
 
+export const removeProductFromInventory = async (productId: string) => {
+    try {
+        await userRepo.removeProductFromInventory(productId);
+    } catch (e) {
+        throw e;
+    }
+};
+
 export default {
     findUser,
     createUser,
@@ -261,4 +269,5 @@ export default {
     getAllDistributors,
     deleteUserById,
     getUserEmails,
+    removeProductFromInventory,
 };

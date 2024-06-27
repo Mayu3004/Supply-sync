@@ -93,6 +93,7 @@ export const deleteProduct = async (productId: string) => {
         }
         const isDeleted = await productRepo.deleteProduct(productId);
         if (!isDeleted) throw productResponses.CAN_NOT_DELETE_PRODUCT;
+        await userService.removeProductFromInventory(productId);
         return productResponses.PRODUCT_DELETED_SUCCESSFULLY;
     } catch (e) {
         throw e;
@@ -106,5 +107,3 @@ export default {
     updateProduct,
     deleteProduct,
 };
-
-//{"inventory.productId": ObjectId("replace_with_productId")}

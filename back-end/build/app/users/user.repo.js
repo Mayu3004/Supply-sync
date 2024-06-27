@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserById = exports.updateRedeemedMerchandises = exports.updatePointesEarned = exports.updateInventory = exports.updateUser = exports.aggregate = exports.getInventory = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.insertOne = exports.findUser = void 0;
+exports.deleteUserById = exports.updateRedeemedMerchandises = exports.updatePointesEarned = exports.updateInventory = exports.updateUser = exports.aggregate = exports.getInventory = exports.getUserById = exports.getAllDistributors = exports.removeProductFromInventory = exports.addProductToInventory = exports.insertOne = exports.findUser = void 0;
 const user_schema_1 = __importDefault(require("./user.schema"));
 const findUser = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_schema_1.default.findOne({
@@ -38,6 +38,10 @@ const addProductToInventory = (newProduct) => __awaiter(void 0, void 0, void 0, 
     return isAdded;
 });
 exports.addProductToInventory = addProductToInventory;
+const removeProductFromInventory = (productId) => __awaiter(void 0, void 0, void 0, function* () {
+    return user_schema_1.default.updateMany({ "inventory.productId": productId }, { $pull: { inventory: { productId: productId } } });
+});
+exports.removeProductFromInventory = removeProductFromInventory;
 const getAllDistributors = (page, limit) => user_schema_1.default
     .find({ role: "Distributor" }, { password: 0 })
     .skip((page - 1) * limit)
@@ -103,4 +107,5 @@ exports.default = {
     updateMerchandiseRequestStatus,
     getAllDistributors: exports.getAllDistributors,
     deleteUserById: exports.deleteUserById,
+    removeProductFromInventory: exports.removeProductFromInventory,
 };

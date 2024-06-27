@@ -13,15 +13,15 @@ const Login = ({ }: LoginProps) => {
 
     const onSubmit = async (data: LoginData) => {
         try {
-            console.log(data);
+           
             const responseData = await LoginRequestHandler(data);
-            console.log(responseData);
+            
             localStorage.setItem("token", JSON.stringify(responseData.token))
             localStorage.setItem("role", JSON.stringify(responseData.role))
             localStorage.setItem("userId", JSON.stringify(responseData.userId))
             const userRole = JSON.parse(localStorage.getItem("role") || '""')
             if (userRole === "Manufacturer") {
-                console.log(userRole);
+              
                 navigate("/manufacturer")
             }
             else if (userRole === "Distributor") {

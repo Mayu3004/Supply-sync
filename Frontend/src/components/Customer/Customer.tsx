@@ -11,7 +11,7 @@ const Customer = ({ }: CustomerProps) => {
     useEffect(()=>{
         const fetchCustomerHandler = async () => {
             const value = await fetchCustomer();
-            console.log(value.data);
+           
 
             setCustomer(value.data)
         };

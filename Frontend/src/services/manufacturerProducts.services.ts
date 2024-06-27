@@ -8,7 +8,7 @@ import Instance from "./instance.services";
 export const fetchProducts = async (currentPage:number) => {
   try {
     const response = await Instance.get(`product/allproducts/${currentPage}/6`);
-    console.log(response.data);
+    
     
     return response.data;
   } catch (error) {
@@ -19,7 +19,7 @@ export const fetchProducts = async (currentPage:number) => {
 export const fetchManufacturerInventory = async () => {
   try {
     const response = await Instance.get("inventory/getinventory");
-    // console.log(response.data);
+   
     
     return response.data;
   } catch (error) {
@@ -28,7 +28,7 @@ export const fetchManufacturerInventory = async () => {
 }
 
 export const addProducts = async (data: ProductFormData) => {
-  // console.log(data);
+ 
 
   try {
     const response = await Instance.post("product/add-product", data)

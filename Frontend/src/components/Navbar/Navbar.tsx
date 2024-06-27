@@ -12,7 +12,7 @@ const Navbar = ({ }: NavbarProps) => {
     const fetchUserDataHandler = async()=>{
         try{
             const response = await fetchUserData();
-            console.log(response.data.name);
+            
             
             setName(response.data.name)
             
@@ -26,16 +26,16 @@ const Navbar = ({ }: NavbarProps) => {
     },[])
 
     const handleLogout = async() => {
-        console.log("Logout");
+        
         const token1 = localStorage.getItem('token');
-        console.log("hadleLogout:",token1);
+        
         
         const parsedToken = token1 ? JSON.parse(token1) : null;
         const responseData =  await LogoutRequestHandler(parsedToken);
         // localStorage.clear()
         localStorage.setItem("token",JSON.stringify(responseData))
         navigate("/")
-        // console.log(parsedToken);
+      
 
     }
     return (

@@ -35,11 +35,11 @@ const Merchandise = ({ }: MerchandiseProps) => {
 
     const handleDelete = async(id: string) => {
        
-        console.log("Delete merchandise with ID:", id);
+       
 
         try {
             const value = await deleteMerchandise(id);
-            console.log(value);
+         
             
         } catch (error) {
             console.error("Error fetching merchandise:", error);
@@ -59,7 +59,7 @@ const Merchandise = ({ }: MerchandiseProps) => {
 
     const handleSubmit = (formData: MerchandiseData) => {
        
-        console.log("Form data submitted:", formData);
+        
        
         setMerchandises(prevMerchandises => {
             const updatedMerchandises = [...prevMerchandises];

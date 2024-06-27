@@ -3,7 +3,7 @@ import Instance from "./instance.services";
 export const fetchDistributorInventory = async () => {
     try {
       const response = await Instance.get("inventory/getinventory",);
-      console.log(response.data);
+     
       
       return response.data;
     } catch (error) {
@@ -14,7 +14,7 @@ export const fetchDistributorInventory = async () => {
   export const submitOrder = async (orderData: any) => {
     const userId = JSON.parse(localStorage.getItem("userId") as string)
     const dataPost = {distributorId:userId,products:orderData}
-    console.log(dataPost);
+    
     
     try {
         const response = await Instance.post('order/placeorder', dataPost);
@@ -26,10 +26,10 @@ export const fetchDistributorInventory = async () => {
 };
 
 export const fetchOrders = async (status:string,page:number) =>{
-  // console.log("status--->",status)
+  
   try {
     const response = await Instance.get(`order/allorder/${status}/${page}/3`);
-    console.log(response.data);
+  
     return response.data
     
   } catch (error) {
@@ -39,7 +39,7 @@ export const fetchOrders = async (status:string,page:number) =>{
 
 export const completeOrder = async (orderId:string) =>{
   try{
-    console.log("hit");
+   
     
     const response = await Instance.put(`order/update/${orderId}`,{
       status:"completed"
@@ -66,7 +66,7 @@ export const redeeemMerchandiseRequest = async(id:string) =>{
 export const fetchMerchandiseByStatus = async(status:string,page:number)=>{
   try {
     const response = await Instance.get(`merchandise/request/${status}/${page}/3`);
-    console.log(response.data);
+   
     return response.data
     
   } catch (error) {
@@ -77,7 +77,7 @@ export const fetchMerchandiseByStatus = async(status:string,page:number)=>{
 export const submitSale = async (allData: any) => {
   const userId = JSON.parse(localStorage.getItem("userId") as string)
   const dataPost = {...allData,distributorId:userId}
-  console.log(dataPost);
+ 
   
   try {
       const response = await Instance.post('sales/create-sales', dataPost);

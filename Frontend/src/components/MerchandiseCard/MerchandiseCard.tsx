@@ -6,12 +6,12 @@ const MerchandiseCard = ({ merchandise }: MerchandiseCardProps) => {
 
     const handleCompleteOrder = async() => {
         
-        console.log("Complete Order clicked for:", merchandise.distributorId);
+     
         const data = {userId:merchandise.distributorId,merchandiseId:merchandise.merchandiseId,status:"completed"}
 
       try{
         const response = await approveMerchandise(data);
-        console.log(response);
+       
         
       }catch(error){
         

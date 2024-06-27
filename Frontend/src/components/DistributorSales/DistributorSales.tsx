@@ -37,7 +37,7 @@ const DistributorSales= () => {
 
     setSearchResults(results);
   };
-  console.log(searchResults);
+
   
 
   const handleAddProduct = (product: Product) => {
@@ -61,10 +61,10 @@ const DistributorSales= () => {
 
   const onSubmit = async(data:FormData) => {
     const allData = {...data, products:selectedProducts}
-    console.log('Submitted Data:', allData);
+   
 
     const response = await submitSale(allData);
-    console.log(response);
+
     
     
     reset();
@@ -217,7 +217,7 @@ export default DistributorSales;
 
 //   const onSubmit: SubmitHandler<FormData> = (data) => {
 //     const allData = { ...data, products: state.selectedProducts };
-//     console.log('Submitted Data:', allData);
+//   
 
 //     reset();
 //     dispatch({ type: 'RESET_SELECTED_PRODUCTS' });
@@ -347,7 +347,7 @@ export default DistributorSales;
 
 //   const onSubmit: SubmitHandler<FormData> = (data) => {
 //     const allData = { ...data, products: state.selectedProducts };
-//     console.log('Submitted Data:', allData);
+//    
 
 //     reset();
 //     dispatch({ type: 'RESET_FORM' });

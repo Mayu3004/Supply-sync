@@ -1,18 +1,17 @@
 
 import { RouterProvider } from "react-router-dom";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import ManufacturerPage from "./pages/ManufacturerPage/ManufacturerPage";
+
 import { router } from "./router/routes";
+// import { ToastContainer } from "react-toastify";
 
 
-const App = () =>{
-  return(
+
+const App = () => {
+  return (
     <div>
-      {/* <LoginPage/>       */}
-      {/* <ManufacturerPage/> */}
-      <RouterProvider router = {router}>
-
-    </RouterProvider>
+      <RouterProvider router={router}>
+      </RouterProvider>
+      {/* <ToastContainer /> */}
     </div>
   )
 }

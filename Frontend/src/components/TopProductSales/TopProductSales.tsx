@@ -13,7 +13,7 @@ const TopProductSales = ({}: TopProductSalesProps) => {
     const fetchTopProductHandler = async () => {
         if (startDate && endDate) {
             const value = await fetchTopProducts(startDate, endDate);
-            console.log(value);
+            
             if (value) {
                 setProducts(value.data);
                 setIsFetched(true);

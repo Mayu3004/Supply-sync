@@ -2,7 +2,7 @@
 import { RouterProvider } from "react-router-dom";
 
 import { router } from "./router/routes";
-// import { ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -11,7 +11,7 @@ const App = () => {
     <div>
       <RouterProvider router={router}>
       </RouterProvider>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
     </div>
   )
 }

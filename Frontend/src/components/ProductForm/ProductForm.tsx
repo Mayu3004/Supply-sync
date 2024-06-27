@@ -51,7 +51,7 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
         try {
             if (!productID) throw new Error("ProductId undefined");
             await deleteProduct(productID);
-            toast.success('Product deleted successfully');
+            // toast.success('Product deleted successfully');
             dispatch({ type: 'SET_REFRESH_PRODUCTS',payload:true });
             closeModal();
         } catch (error) {
@@ -114,7 +114,6 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
                         <div className={styles.ButtonContainer}>
                             <button type="button" onClick={onCancel} className={`${styles.Button} ${styles.DeleteBtn}`}>CANCEL</button>
                             <button type="submit" className={`${styles.Button} ${styles.EditBtn}`}>SAVE</button>
-                            <ToastContainer />
                         </div>
                     </form>
                 </>
@@ -128,7 +127,7 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
                             <button type="button" onClick={onCancel} className={`${styles.Button} ${styles.DeleteBtn}`}>CANCEL</button>
                             <button type="submit" className={`${styles.Button} ${styles.EditBtn}`}>SAVE</button>
                         </div>
-                            <ToastContainer />
+                           
                     </form>
                 </>
             )}
@@ -139,7 +138,7 @@ const ProductForm = ({ isModalAdd, isModalUpdate, isModalDelete, productID, prod
                         <div className={styles.ButtonContainer}>
                             <button type="button" onClick={onCancel} className={`${styles.Button} ${styles.DeleteBtn}`}>CANCEL</button>
                             <button type="button" onClick={onClickDelete} className={`${styles.Button} ${styles.EditBtn}`}>CONFIRM</button>
-                            <ToastContainer />
+                           
                         </div>
                     </div>
 

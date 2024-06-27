@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import Instance from "./instance.services";
 
 export const fetchDistributorInventory = async () => {
@@ -38,16 +39,14 @@ export const fetchOrders = async (status:string,page:number) =>{
 }
 
 export const completeOrder = async (orderId:string) =>{
-  try{
-   
-    
+  try{ 
     const response = await Instance.put(`order/update/${orderId}`,{
       status:"completed"
     });
     return response.status
   }
   catch(error){
-
+    toast.error(`${error}`)
   }
 }
 

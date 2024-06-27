@@ -82,8 +82,8 @@ const ManufacturerProduct = () => {
                             X
                         </button>
                         <ProductForm isModalAdd={state.isModalAdd} closeModal={closeModal} />
+                        
                     </div>
-                    <ToastContainer/>
                 </div>
             )}
             {state.isModalUpdate && (
@@ -98,8 +98,8 @@ const ManufacturerProduct = () => {
                             product={state.selectedProduct}
                             closeModal={closeModal}
                         />
+                        
                     </div>
-                    <ToastContainer/>
                 </div>
             )}
             {state.isModalDelete && (

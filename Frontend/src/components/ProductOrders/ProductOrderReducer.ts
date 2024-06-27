@@ -2,29 +2,34 @@
 
 import { Order, } from "./ProductOrders.types";
 
-type State = {
+export type OrderState = {
   orders: Order[];
   status: 'pending' | 'completed';
+  currentPage: number;
+  totalPages: number;
 };
 
-type Action =
-  | { type: 'FETCH_ORDERS_SUCCESS'; payload: Order[] }
+export type OrderAction =
+  | { type: 'FETCH_ORDERS_SUCCESS'; payload: { orders: Order[]; totalPages: number } }
   | { type: 'COMPLETE_ORDER'; payload: string }
-  | { type: 'SET_STATUS'; payload: 'pending' | 'completed' };
+  | { type: 'SET_STATUS'; payload: 'pending' | 'completed' }
+  | { type: 'SET_CURRENT_PAGE'; payload: number };
 
-export const initialState: State = {
+export const initialState: OrderState = {
   orders: [],
   status: 'pending',
+  currentPage: 1,
+  totalPages: 10, // Example initial total pages
 };
 
-export const ordersReducer = (state: State, action: Action): State => {
+export const ordersReducer = (state: OrderState, action: OrderAction): OrderState => {
   switch (action.type) {
     case 'FETCH_ORDERS_SUCCESS':
       return {
         ...state,
-        orders: action.payload,
+        orders: action.payload.orders,
+        totalPages: action.payload.totalPages,
       };
-  
     case 'COMPLETE_ORDER':
       return {
         ...state,
@@ -37,7 +42,13 @@ export const ordersReducer = (state: State, action: Action): State => {
         ...state,
         status: action.payload,
       };
+    case 'SET_CURRENT_PAGE':
+      return {
+        ...state,
+        currentPage: action.payload,
+      };
     default:
       return state;
   }
 };
+

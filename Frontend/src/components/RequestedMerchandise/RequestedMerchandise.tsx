@@ -1,48 +1,41 @@
  
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import styles from "./RequestedMerchandise.module.scss";
 import { RequestedMerchandiseProps } from "./RequestedMerchandise.types";
-import { MerchandiseData } from "../Merchandise/Merchandise.types";
 import { fetchMerchandiseByStatus } from "../../services/DistributorProduct.services";
 import MerchandiseCard from "../MerchandiseCard/MerchandiseCard";
-import Pagination from "../Pagination/Pagination"; // Import Pagination component
+import Pagination from "../Pagination/Pagination";
+import { initialState, merchandiseRequestReducer } from "./RequestedMerchandise.state";
 
 const RequestedMerchandise = ({}: RequestedMerchandiseProps) => {
-    const [merchandises, setMerchandises] = useState<MerchandiseData[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(10);
-    const [status, setStatus] = useState<string>("pending"); // Default status is pending
+    const [state, dispatch] = useReducer(merchandiseRequestReducer, initialState);
 
     useEffect(() => {
-        fetchData(status, currentPage);
-    }, [status,currentPage]);
+        fetchData(state.status, state.currentPage);
+    }, [state.status, state.currentPage]);
 
     const fetchData = async (status: string, page: number) => {
         try {
             const value = await fetchMerchandiseByStatus(status, page);
-            setMerchandises(value.data);
-            
+            dispatch({ type: "SET_MERCHANDISES", payload: value.data });
         } catch (error) {
             console.error(`Error fetching ${status} merchandise:`, error);
         }
     };
 
     const handlePendingClick = () => {
-        setStatus("pending");
-        setCurrentPage(1); 
+        dispatch({ type: "SET_STATUS", payload: "pending" });
+        dispatch({ type: "SET_CURRENT_PAGE", payload: 1 });
     };
 
     const handleCompletedClick = () => {
-        setStatus("completed");
-        setCurrentPage(1); 
+        dispatch({ type: "SET_STATUS", payload: "completed" });
+        dispatch({ type: "SET_CURRENT_PAGE", payload: 1 });
     };
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        fetchData(status,page)
+        dispatch({ type: "SET_CURRENT_PAGE", payload: page });
     };
-   
-    
 
     return (
         <div className={styles.RequestedMerchandiseContainer}>
@@ -55,14 +48,14 @@ const RequestedMerchandise = ({}: RequestedMerchandiseProps) => {
                 </button>
             </div>
             <div className={styles.MerchandiseContainer}>
-                {merchandises.map((merchandise, index) => (
+                {state.merchandises.map((merchandise, index) => (
                     <MerchandiseCard key={index} merchandise={merchandise} />
                 ))}
             </div>
             <div className={styles.Footer}>
                 <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
+                    currentPage={state.currentPage}
+                    totalPages={state.totalPages}
                     onPageChange={handlePageChange}
                 />
             </div>

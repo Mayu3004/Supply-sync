@@ -96,6 +96,7 @@ const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function*
         const isDeleted = yield product_repo_1.default.deleteProduct(productId);
         if (!isDeleted)
             throw product_responses_1.productResponses.CAN_NOT_DELETE_PRODUCT;
+        yield user_service_1.default.removeProductFromInventory(productId);
         return product_responses_1.productResponses.PRODUCT_DELETED_SUCCESSFULLY;
     }
     catch (e) {
@@ -110,4 +111,3 @@ exports.default = {
     updateProduct: exports.updateProduct,
     deleteProduct: exports.deleteProduct,
 };
-//{"inventory.productId": ObjectId("replace_with_productId")}

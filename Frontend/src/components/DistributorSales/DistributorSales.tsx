@@ -1,16 +1,14 @@
 
 
-import React, { useState, useEffect, useReducer } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import styles from './DistributorSales.module.scss';
 import { FormData } from './DistributorSales.types';
 import { fetchDistributorInventory, submitSale } from '../../services/DistributorProduct.services';
-// import { InventoryProduct } from '../ManufacturerInventory/ManufacturerInventory.types';
-// import { Product } from '../ManufacturerProduct/ManufacturerProduct.types';
-
+import { InventoryProduct } from '../ManufacturerInventory/ManufacturerInventory.types';
 import { Product } from "../ManufacturerProduct/ManufacturerProduct.types";
-import { InventoryProduct } from "./DistributorSales.types";
-import { salesReducer, initialState } from './DistributorSales.state';
+
+
 
 const DistributorSales= () => {
   const { register, handleSubmit, reset } = useForm<FormData>();
@@ -24,14 +22,15 @@ const DistributorSales= () => {
   }, []);
 
   const fetchInventory = async () => {
-    const value = await fetchDistributorInventory();
+    const value = await fetchDistributorInventory(); 
     setInventory(value.data);
   };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     
-    const results = inventory.filter((item) =>
+    const resultArray = inventory.filter(item=>item.product!==null);
+    const results =resultArray.filter((item) =>
       item.product.productName.toLowerCase().includes(query.toLowerCase())
     );
 
@@ -61,12 +60,7 @@ const DistributorSales= () => {
 
   const onSubmit = async(data:FormData) => {
     const allData = {...data, products:selectedProducts}
-   
-
     const response = await submitSale(allData);
-
-    
-    
     reset();
     setSelectedProducts([]);
   };
@@ -109,7 +103,7 @@ const DistributorSales= () => {
             placeholder="Search by product name"
           />
           <ul className={styles.SearchResults}>
-            {searchResults.map((item) => (
+            {searchResults.filter(pro=>pro.product!==null).map((item) => (
               <li key={item.product._id}>
                 {item.product.productName}
                 <button
@@ -137,7 +131,7 @@ const DistributorSales= () => {
                   onChange={(e) =>
                     setSelectedProducts((prevProducts) =>
                       prevProducts.map((p, idx) =>
-                        idx === index ? { ...p, quantity: parseInt(e.target.value, 10) } : p
+                        idx === index ? { ...p, quantity: parseInt(e.target.value) } : p
                       )
                     )
                   }
@@ -149,7 +143,7 @@ const DistributorSales= () => {
                   onChange={(e) =>
                     setSelectedProducts((prevProducts) =>
                       prevProducts.map((p, idx) =>
-                        idx === index ? { ...p, currentPrice: parseInt(e.target.value, 10) } : p
+                        idx === index ? { ...p, currentPrice: parseInt(e.target.value) } : p
                       )
                     )
                   }
@@ -168,35 +162,21 @@ const DistributorSales= () => {
 export default DistributorSales;
 
 
-
-
-
-
-
-
-
-
-
-
-// import React, { useEffect, useReducer } from 'react';
-// import { useForm, SubmitHandler } from 'react-hook-form';
+// import { useEffect, useReducer } from 'react';
+// import { useForm, Controller } from 'react-hook-form';
+// import { zodResolver } from '@hookform/resolvers/zod';
 // import styles from './DistributorSales.module.scss';
-// import { FormData } from './DistributorSales.types';
-// import { fetchDistributorInventory } from '../../services/DistributorProduct.services';
+// import { fetchDistributorInventory, submitSale } from '../../services/DistributorProduct.services';
+// import { distributorSalesReducer, initialDistributorSalesState } from './DistributorSales.state';
+// // import { distributorSalesSchema, DistributorSalesFormData } from './DistributorSales.validation';
 // import { Product } from '../ManufacturerProduct/ManufacturerProduct.types';
-// import salesReducer, { initialSalesState } from './DistributorSales.state';
-// // import salesReducer from './salesReducer'; // Import the reducer
-
-// const initialFormState: FormData = {
-//   customerName: '',
-//   customerMobileNumber: '',
-//   customerEmail: '',
-//   products: [],
-// };
+// import { DistributorSalesFormData, distributorSalesSchema } from './DistributorSales.types';
 
 // const DistributorSales = () => {
-//   const { register, handleSubmit, reset } = useForm<FormData>({ defaultValues: initialFormState });
-//   const [state, dispatch] = useReducer(salesReducer, initialSalesState);
+//   const [state, dispatch] = useReducer(distributorSalesReducer, initialDistributorSalesState);
+//   const { register, handleSubmit, reset, control } = useForm<DistributorSalesFormData>({
+//     resolver: zodResolver(distributorSalesSchema),
+//   });
 
 //   useEffect(() => {
 //     fetchInventory();
@@ -204,21 +184,27 @@ export default DistributorSales;
 
 //   const fetchInventory = async () => {
 //     const value = await fetchDistributorInventory();
-//     dispatch({ type: 'FETCH_INVENTORY', payload: value.data });
+//     dispatch({ type: 'SET_INVENTORY', payload: value.data });
 //   };
 
 //   const handleSearch = (query: string) => {
-//     dispatch({ type: 'SEARCH_PRODUCTS', payload: query });
+//     dispatch({ type: 'SET_SEARCH_QUERY', payload: query });
+//     const resultArray = state.inventory.filter(item=>item.product!==null);
+//     const results =resultArray.filter((item) =>
+//       item.product.productName.toLowerCase().includes(query.toLowerCase())
+//     );
+//     dispatch({ type: 'SET_SEARCH_RESULTS', payload: results });
 //   };
 
 //   const handleAddProduct = (product: Product) => {
 //     dispatch({ type: 'ADD_PRODUCT', payload: product });
+//     dispatch({ type: 'SET_SEARCH_QUERY', payload: '' });
+//     dispatch({ type: 'SET_SEARCH_RESULTS', payload: [] });
 //   };
 
-//   const onSubmit: SubmitHandler<FormData> = (data) => {
+//   const onSubmit = async (data: DistributorSalesFormData) => {
 //     const allData = { ...data, products: state.selectedProducts };
-//   
-
+//     const response = await submitSale(allData);
 //     reset();
 //     dispatch({ type: 'RESET_SELECTED_PRODUCTS' });
 //   };
@@ -232,7 +218,7 @@ export default DistributorSales;
 //           <input
 //             type="text"
 //             id="customerName"
-//             {...register('customerName', { required: true })}
+//             {...register('customerName')}
 //           />
 //         </div>
 //         <div className={styles.FormGroup}>
@@ -240,7 +226,7 @@ export default DistributorSales;
 //           <input
 //             type="text"
 //             id="customerMobileNumber"
-//             {...register('customerMobileNumber', { required: true })}
+//             {...register('customerMobileNumber')}
 //           />
 //         </div>
 //         <div className={styles.FormGroup}>
@@ -248,7 +234,7 @@ export default DistributorSales;
 //           <input
 //             type="email"
 //             id="customerEmail"
-//             {...register('customerEmail', { required: true })}
+//             {...register('customerEmail')}
 //           />
 //         </div>
 //         <div className={styles.FormGroup}>
@@ -266,7 +252,8 @@ export default DistributorSales;
 //                 {item.product.productName}
 //                 <button
 //                   type="button"
-//                   onClick={() => handleAddProduct(item)}
+//                   className={styles.AddBtn}
+//                   onClick={() => handleAddProduct(item.product)}
 //                 >
 //                   Add
 //                 </button>
@@ -277,176 +264,62 @@ export default DistributorSales;
 //         <div className={styles.SelectedProducts}>
 //           <h3>Selected Products</h3>
 //           <ul>
-//             {state.selectedProducts.map((item, index) => (
-//               <li key={index}>
-//                 {item.product.productName} - Quantity:
-//                 <input
-//                   type="number"
-//                   value={item.quantity}
-//                   onChange={(e) =>
-//                     dispatch({
-//                       type: 'INCREMENT_QUANTITY',
-//                       payload: item.product._id,
-//                     })
-//                   }
-//                 />
-//                 - Price:
-//                 <input
-//                   type="number"
-//                   value={item.product.currentPrice}
-//                   onChange={(e) =>
-//                     dispatch({
-//                       type: 'UPDATE_PRICE',
-//                       payload: {
-//                         productId: item.product._id,
-//                         currentPrice: parseInt(e.target.value, 10),
-//                       },
-//                     })
-//                   }
-//                 />
+//             {state.selectedProducts.map((product, index) => (
+//               <li className={styles.ListProduct} key={index}>
+//                 <div className={styles.ProductName}>{product.productName}</div>
+//                 <div className={styles.PQuantity}>
+//                   Quantity:
+//                   <Controller
+//                     control={control}
+//                     name={`products.${index}.quantity` as const}
+//                     render={({ field }) => (
+//                       <input
+//                         type="number"
+//                         {...field}
+//                         value={product.quantity}
+//                         // min={1}
+//                         onChange={(e) => {
+//                           field.onChange(e);
+//                           dispatch({
+//                             type: 'UPDATE_PRODUCT_QUANTITY',
+//                             payload: { index, quantity: Number(e.target.value) },
+//                           });
+//                         }}
+//                       />
+//                     )}
+//                   />
+//                 </div>
+//                 <div className={styles.PriceQuantity}>
+//                   Price:
+//                   <Controller
+//                     control={control}
+//                     name={`products.${index}.currentPrice` as const}
+//                     render={({ field }) => (
+//                       <input
+//                         type="number"
+//                         {...field}
+//                         value={product.currentPrice}
+//                         min={0}
+//                         onChange={(e) => {
+//                           field.onChange(e);
+//                           dispatch({
+//                             type: 'UPDATE_PRODUCT_PRICE',
+//                             payload: { index, currentPrice: Number(e.target.value) },
+//                           });
+//                         }}
+//                       />
+//                     )}
+//                   />
+//                 </div>
 //               </li>
 //             ))}
 //           </ul>
 //         </div>
-//         <button type="submit">Submit</button>
+//         <button className={styles.EditBtn} type="submit">Submit</button>
 //       </form>
 //     </div>
 //   );
 // };
 
 // export default DistributorSales;
-
-
-// const DistributorSales: React.FC = () => {
-//   const { register, handleSubmit, reset } = useForm<FormData>();
-//   const [state, dispatch] = useReducer(salesReducer, initialState);
-
-//   useEffect(() => {
-//     fetchInventory();
-//   }, []);
-
-//   const fetchInventory = async () => {
-//     const value = await fetchDistributorInventory();
-//     dispatch({ type: 'SET_INVENTORY', payload: value.data });
-//   };
-
-//   const handleSearch = (query: string) => {
-//     dispatch({ type: 'SET_SEARCH_QUERY', payload: query });
-
-//     const results = state.inventory.filter((item) =>
-//       item.product.productName.toLowerCase().includes(query.toLowerCase())
-//     );
-
-//     dispatch({ type: 'SET_SEARCH_RESULTS', payload: results });
-//   };
-
-//   const handleAddProduct = (product: Product) => {
-//     dispatch({ type: 'ADD_PRODUCT', payload: product });
-//     dispatch({ type: 'SET_SEARCH_QUERY', payload: '' }); // Clear search query after adding product
-//   };
-
-//   const onSubmit: SubmitHandler<FormData> = (data) => {
-//     const allData = { ...data, products: state.selectedProducts };
-//    
-
-//     reset();
-//     dispatch({ type: 'RESET_FORM' });
-//   };
-
-//   return (
-//     <div className={styles.DistributorSalesContainer}>
-//       <h2>Sell Inventory</h2>
-//       <form className={styles.SalesForm} onSubmit={handleSubmit(onSubmit)}>
-//         <div className={styles.FormGroup}>
-//           <label htmlFor="customerName">Customer Name:</label>
-//           <input
-//             type="text"
-//             id="customerName"
-//             {...register('customerName', { required: true })}
-//           />
-//         </div>
-//         <div className={styles.FormGroup}>
-//           <label htmlFor="customerMobileNumber">Customer Mobile Number:</label>
-//           <input
-//             type="text"
-//             id="customerMobileNumber"
-//             {...register('customerMobileNumber', { required: true })}
-//           />
-//         </div>
-//         <div className={styles.FormGroup}>
-//           <label htmlFor="customerEmail">Customer Email:</label>
-//           <input
-//             type="email"
-//             id="customerEmail"
-//             {...register('customerEmail', { required: true })}
-//           />
-//         </div>
-//         <div className={styles.FormGroup}>
-//           <label htmlFor="productSearch">Search Product:</label>
-//           <input
-//             type="text"
-//             id="productSearch"
-//             value={state.searchQuery}
-//             onChange={(e) => handleSearch(e.target.value)}
-//             placeholder="Search by product name"
-//           />
-//           <ul className={styles.SearchResults}>
-//             {state.searchResults.map((item) => (
-//               <li key={item.productId}>
-//                 {item.productName}
-//                 <button
-//                   type="button"
-//                   onClick={() => handleAddProduct(item)}
-//                 >
-//                   Add
-//                 </button>
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//         <div className={styles.SelectedProducts}>
-//           <h3>Selected Products</h3>
-//           <ul>
-//             {state.selectedProducts.map((product, index:number) => (
-//               <li key={index}>
-//                 {product.productName} - Quantity:
-//                 <input
-//                   type="number"
-//                   value={product.quantity}
-//                   onChange={(e) =>
-//                     dispatch({
-//                       type: 'UPDATE_PRODUCT_QUANTITY',
-//                       payload: { index, quantity: parseInt(e.target.value, 10) },
-//                     })
-//                   }
-//                 />
-//                 - Price:
-//                 <input
-//                   type="number"
-//                   value={product.currentPrice}
-//                   onChange={(e) =>
-//                     dispatch({
-//                       type: 'UPDATE_PRODUCT_PRICE',
-//                       payload: { index, currentPrice: parseInt(e.target.value, 10) },
-//                     })
-//                   }
-//                 />
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//         <button type="submit">Submit</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default DistributorSales;
-
-
-
-
-
-
-
 

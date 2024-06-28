@@ -64,8 +64,8 @@ export const deleteProduct = async (productId: string | null) => {
     const response = await Instance.delete(`/product/delete/${productId}`)
     toast.success("Product deleted successfully")
     return response.data;
-  } catch (error) {
-    toast.error('Error deleting product:');
+  } catch (error:any) {
+    toast.error(`${error.response.data.message}`);
   }
 };
 

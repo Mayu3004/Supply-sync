@@ -4,15 +4,10 @@ import { MerchandiseCardProps } from "./MerchandiseCard.types.ts";
 
 const MerchandiseCard = ({ merchandise }: MerchandiseCardProps) => {
 
-    const handleCompleteOrder = async() => {
-        
-     
+    const handleCompleteOrder = async() => { 
         const data = {userId:merchandise.distributorId,merchandiseId:merchandise.merchandiseId,status:"completed"}
-
       try{
-        const response = await approveMerchandise(data);
-       
-        
+        await approveMerchandise(data);
       }catch(error){
         
       }

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserById = exports.updateMerchandiseRequestStatus = exports.updateRedeemedMerchandise = exports.checkPointsLevel = exports.calculateTotalPoints = exports.updatePointesEarned = exports.updateUser = exports.updateInventory = exports.getMerchandiseRequests = exports.getInventory = exports.getUserEmails = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.checkExisting = exports.createUser = exports.findUser = void 0;
+exports.removeProductFromInventory = exports.deleteUserById = exports.updateMerchandiseRequestStatus = exports.updateRedeemedMerchandise = exports.checkPointsLevel = exports.calculateTotalPoints = exports.updatePointesEarned = exports.updateUser = exports.updateInventory = exports.getMerchandiseRequests = exports.getInventory = exports.getUserEmails = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.checkExisting = exports.createUser = exports.findUser = void 0;
 const auth_responses_1 = require("../auth/auth.responses");
 const encrypt_1 = require("../utility/encrypt");
 const user_repo_1 = __importDefault(require("./user.repo"));
@@ -234,6 +234,15 @@ const deleteUserById = (userId, deletedBy) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.deleteUserById = deleteUserById;
+const removeProductFromInventory = (productId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield user_repo_1.default.removeProductFromInventory(productId);
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.removeProductFromInventory = removeProductFromInventory;
 exports.default = {
     findUser: exports.findUser,
     createUser: exports.createUser,
@@ -250,4 +259,5 @@ exports.default = {
     getAllDistributors: exports.getAllDistributors,
     deleteUserById: exports.deleteUserById,
     getUserEmails: exports.getUserEmails,
+    removeProductFromInventory: exports.removeProductFromInventory,
 };

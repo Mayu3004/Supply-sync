@@ -1,44 +1,46 @@
-
-import { useReducer, useState } from "react";
-import styles from "./TopPerformers.module.scss";
-import { DateForm, DateSchema, PerformerData, TopPerformersProps } from "./TopPerformers.types";
-import List from "../List/List";
-import { fetchPerformers } from "../../services/manufacturer.services";
-import { initialTopPerformersState, topPerformersReducer } from "./TopPerformer.state";
 import { useForm } from "react-hook-form";
+import SalesChart from "../SalesChart/SalesChart.tsx";
+import { DateForm, DateSchema } from "../TopPerformers/TopPerformers.types.ts";
+import styles from "./DisplayManufacturerSales.module.scss"; 
+import { DisplayManufacturerSalesProps, SalesData } from "./DisplayManufacturerSales.types.ts" 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
+import {  useReducer } from "react";
+import { initialSalesState, salesReducer } from "./DisplayManufacturer.state.ts";
+import { fetchSales } from "../../services/manufacturer.services.ts";
+ 
 
-const TopPerformers = ({ }: TopPerformersProps) => {
-    const [state, dispatch] = useReducer(topPerformersReducer, initialTopPerformersState)
+const DisplayManufacturerSales = ({}: DisplayManufacturerSalesProps) => { 
+
+    const [state, dispatch] = useReducer(salesReducer, initialSalesState)
     const { register, handleSubmit, formState: { errors } } = useForm<DateForm>({
         resolver: zodResolver(DateSchema)
     });
 
-
-    const fetchPerformerHandler = async (formData:DateForm) => {
+    const fetchSalesHandler = async (formData:DateForm) => {
         try {
-            const value = await fetchPerformers(formData.startDate, formData.endDate);
-            dispatch({ type: 'SET_PERFORMERS', payload: value.data });
+            const value = await fetchSales(formData.startDate, formData.endDate);
+            dispatch({ type: 'SET_SALES', payload: value.data });
             dispatch({ type: 'SET_IS_FETCHED', payload: true });
         } catch (error) {
             console.error('Error fetching performers:', error);
         }
     };
-
-    const onHandleSubmit = (formData: DateForm) => { 
+    const onHandleSubmit = async(formData: DateForm) => { 
         const startdate = new Date(formData.startDate);
         const enddate = new Date(formData.endDate);
         if(startdate<=enddate){
-            fetchPerformerHandler(formData);
+            await fetchSalesHandler(formData);
+           
         }else{
             toast.error("End date greater than start date")
         }
         
-    };
-
+    }; 
+    
     return (
-        <div className={styles.DistributorContainer}>
+        <div className={styles.SalesContainer}>
+            <h1>Sales Data</h1>
             <form onSubmit={handleSubmit(onHandleSubmit)} className={styles.DateForm}>
                 <div className={styles.FormGroup}>
                     <label htmlFor="startDate">Start Date:</label>
@@ -56,22 +58,19 @@ const TopPerformers = ({ }: TopPerformersProps) => {
                         {...register('endDate')}
                     />
                 </div>
-                <button type="submit" className={styles.SubmitBtn}>Fetch Performers</button>
+                <button type="submit" className={styles.SubmitBtn}>Fetch Sales</button>
             </form>
-
             {state.isFetched && (
-                <div className={styles.DistributorDataContainer}>
-                    {state.performers.map((performer, index) => (
-                        <List
-                            key={index}
-                            name={performer.distributorName}
-                            sales={performer.totalSales}
-                        />
-                    ))}
+                <div className={styles.ChartContainer}>
+                    <SalesChart 
+                        salesData={state.sales.map((item: SalesData) => item.totalQuantity)} 
+                        productNames={state.sales.map((item: SalesData) => item.productName)} 
+                    />
                 </div>
             )}
         </div>
     );
 };
 
-export default TopPerformers;
+ 
+export default DisplayManufacturerSales 

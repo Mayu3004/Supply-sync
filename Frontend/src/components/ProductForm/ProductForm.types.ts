@@ -10,10 +10,10 @@ import { z } from "zod"
 // })
 
 export const productFormSchema = z.object({
-  productName: z.string().trim().nonempty("Product name is required"),
+  productName: z.string().trim().min(1,{message:"Product name is required"}),
   productPrice: z.number().min(1),
-  productImage: z.string().nonempty("Product image URL is required"),
-  productDescription: z.string().nonempty("Description is required"),
+  productImage: z.string().min(1,{message:"Product image URL is required"}),
+  productDescription: z.string().min(1,{message:"Description is required"}),
   
 });
 

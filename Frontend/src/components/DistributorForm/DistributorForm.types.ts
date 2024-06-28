@@ -2,12 +2,12 @@
 
  export const distributorFormSchema = z.object ({
   //  _id:z.string().optional(),
-    name: z.string().nonempty("Name is required"),
-    username:z.string().nonempty("Username is required"),
-    password:z.string().nonempty("password is required"),
+    name: z.string().min(1,{message:"Name is required"}),
+    username:z.string().min(1,{message:"Username is required"}).optional(),
+    password:z.string().min(1,{message:"password is required"}).optional(),
     role:z.enum(['Distributor']).optional(),
-    mobileNumber:z.string().nonempty("Mobile NUmber is required"),
-    email:z.string().nonempty("Email is required"),
+    mobileNumber:z.string().min(10,{message:"Mobile Number of 10 digits required"}).max(10,{message:"Mobile number is greater than 10 digit"}),
+    email:z.string().min(1,{message:"Email is required"}),
     totalPoints:z.number().optional().default(0)
  })
 

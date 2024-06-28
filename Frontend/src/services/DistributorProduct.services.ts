@@ -16,9 +16,9 @@ export const fetchDistributorInventory = async () => {
     const userId = JSON.parse(localStorage.getItem("userId") as string)
     const dataPost = {distributorId:userId,products:orderData}
     
-    
     try {
         const response = await Instance.post('order/placeorder', dataPost);
+        toast.success('Order Placed succesfully')
         return response.data; 
     } catch (error) {
         console.error('Error submitting order:', error);
@@ -63,8 +63,11 @@ export const redeeemMerchandiseRequest = async(id:string) =>{
 }
 
 export const fetchMerchandiseByStatus = async(status:string,page:number)=>{
+  
+  
   try {
     const response = await Instance.get(`merchandise/request/${status}/${page}/3`);
+   
    
     return response.data
     
@@ -76,14 +79,12 @@ export const fetchMerchandiseByStatus = async(status:string,page:number)=>{
 export const submitSale = async (allData: any) => {
   const userId = JSON.parse(localStorage.getItem("userId") as string)
   const dataPost = {...allData,distributorId:userId}
- 
-  
   try {
       const response = await Instance.post('sales/create-sales', dataPost);
+      toast.success("Sales Added Successfully")
       return response.data; 
-  } catch (error) {
-      console.error('Error submitting order:', error);
-      throw error; 
+  } catch (error:any) {
+      toast.error(`${error.response.data.error}`) 
   }
 };
 

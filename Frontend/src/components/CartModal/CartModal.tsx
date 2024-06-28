@@ -25,6 +25,7 @@ const CartModal = ({cartItems, onClose, onConfirm}: CartModalProps) => {
                             type="number"
                             value={item.quantity}
                             onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
+                            min={1}
                         />
                     </div>
                 ))}

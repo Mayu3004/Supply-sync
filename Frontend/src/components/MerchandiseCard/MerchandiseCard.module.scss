@@ -1,6 +1,7 @@
 .MerchandiseCard {
     display: flex;
-    flex-direction: column;
+    // flex-wrap: wrap;
+    // flex-direction: column;
     justify-content: space-around;
     padding: 1rem;
     border-radius: 4px;

@@ -1,22 +1,21 @@
 
-import { useEffect, useReducer, useState } from "react";
+import { useEffect } from "react";
 import styles from "./Distributor.module.scss";
-import { DistributorData, DistributorProps } from "./Distributor.types";
+import {  DistributorProps } from "./Distributor.types";
 import { fetchDistributor } from "../../services/manufacturer.services";
 import List from "../List/List";
 import DistributorForm from "../DistributorForm/DistributorForm";
-import { distributorReducer, initialDistributorState } from "./Distributor.state";
 import Pagination from "../Pagination/Pagination";
+import { DistributorProvider, useDistributorContext } from "./DistributorContext";
 
 const Distributor = ({ }: DistributorProps) => {
-    const [state, dispatch] = useReducer(distributorReducer, initialDistributorState);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(10);
+    // const [state, dispatch] = useReducer(distributorReducer, initialDistributorState);
+    const { state, dispatch } = useDistributorContext();
 
-    const { distributors, isModalAdd, isModalUpdate, isModalDelete, selectedDistributorId, selectedDistributor } = state;
+    // const { distributors, isModalAdd, isModalUpdate, isModalDelete, selectedDistributorId, selectedDistributor, currentPage, totalPages } = state;
 
     const onUpdate = (id: string) => {
-        const distributor = distributors?.find(distributor => distributor._id === id) || null;
+        const distributor = state.distributors?.find(distributor => distributor._id === id) || null;
         dispatch({ type: 'SET_SELECTED_DISTRIBUTOR', payload: distributor });
         dispatch({ type: 'SET_SELECTED_DISTRIBUTOR_ID', payload: id });
         dispatch({ type: 'SET_IS_MODAL_UPDATE', payload: true });
@@ -38,27 +37,28 @@ const Distributor = ({ }: DistributorProps) => {
     };
 
     const fetchDistributorHandler = async (page: number) => {
-       
-        
         try {
             const response = await fetchDistributor(page);
-
-    
-            
             dispatch({ type: 'SET_DISTRIBUTORS', payload: response.data });
-            // setTotalPages(response.data.totalPages);  // Update totalPages state
         } catch (error) {
             console.error("Failed to fetch distributors", error);
         }
     };
 
     useEffect(() => {
-        fetchDistributorHandler(currentPage);
+        fetchDistributorHandler(state.currentPage);
     }, []);
 
+    useEffect(() => {
+        if (state.refreshDistributors) {
+            fetchDistributorHandler(state.currentPage);
+            dispatch({ type: 'SET_REFRESH_DISTRIBUTORS', payload: false });
+        }
+    }, [state.refreshDistributors, state.currentPage]);
+
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        fetchDistributorHandler(page)
+        dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
+        fetchDistributorHandler(page);
     };
 
     return (
@@ -67,7 +67,7 @@ const Distributor = ({ }: DistributorProps) => {
                 <strong>+</strong> ADD
             </button>
             <div className={styles.DistributorDataContainer}>
-                {distributors?.map((distributor, index) => (
+                {state.distributors?.map((distributor, index) => (
                     <List
                         key={index}
                         name={distributor.name}
@@ -80,42 +80,42 @@ const Distributor = ({ }: DistributorProps) => {
             </div>
             <div className={styles.Footer}>
                 <Pagination 
-                    currentPage={currentPage} 
-                    totalPages={totalPages} 
+                    currentPage={state.currentPage} 
+                    totalPages={state.totalPages} 
                     onPageChange={handlePageChange} 
                 />
             </div>
-            {isModalAdd && (
+            {state.isModalAdd && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <DistributorForm isModalAdd={isModalAdd} closeModal={closeModal} dispatch={dispatch} />
+                        <DistributorForm isModalAdd={state.isModalAdd} closeModal={closeModal} />
                     </div>
                 </div>
             )}
-            {isModalUpdate && (
+            {state.isModalUpdate && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
                         <DistributorForm
-                            isModalUpdate={isModalUpdate}
-                            distributorID={selectedDistributorId}
-                            distributor={selectedDistributor}
+                            isModalUpdate={state.isModalUpdate}
+                            distributorID={state.selectedDistributorId}
+                            distributor={state.selectedDistributor}
                             closeModal={closeModal}
-                            dispatch={dispatch}
+                            // dispatch={dispatch}
                         />
                     </div>
                 </div>
             )}
-            {isModalDelete && (
+            {state.isModalDelete && (
                 <div className={styles.ModalView}>
                     <div className={styles.ModalContent}>
                         <button className={styles.CloseBtn} onClick={closeModal}>X</button>
                         <DistributorForm
-                            isModalDelete={isModalDelete}
-                            distributorID={selectedDistributorId} 
+                            isModalDelete={state.isModalDelete}
+                            distributorID={state.selectedDistributorId} 
                             closeModal={closeModal}
-                            dispatch={dispatch}
+                            // dispatch={dispatch}
                         />
                     </div>
                 </div>
@@ -124,7 +124,12 @@ const Distributor = ({ }: DistributorProps) => {
     );
 };
 
-export default Distributor;
+const DistributorWrapper = () => (
+    <DistributorProvider>
+        <Distributor />
+    </DistributorProvider>
+);
 
+export default DistributorWrapper;
 
 

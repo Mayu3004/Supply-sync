@@ -6,6 +6,7 @@ export type OrderState = {
   orders: Order[];
   status: 'pending' | 'completed';
   currentPage: number;
+  refreshProducts:boolean;
   totalPages: number;
 };
 
@@ -13,13 +14,15 @@ export type OrderAction =
   | { type: 'FETCH_ORDERS_SUCCESS'; payload: { orders: Order[]; totalPages: number } }
   | { type: 'COMPLETE_ORDER'; payload: string }
   | { type: 'SET_STATUS'; payload: 'pending' | 'completed' }
-  | { type: 'SET_CURRENT_PAGE'; payload: number };
+  | { type: 'SET_CURRENT_PAGE'; payload: number }
+  | {type:"SET_REFRESH_ORDER";payload:boolean};
 
 export const initialState: OrderState = {
   orders: [],
   status: 'pending',
   currentPage: 1,
-  totalPages: 10, // Example initial total pages
+  refreshProducts:false,
+  totalPages: 10, 
 };
 
 export const ordersReducer = (state: OrderState, action: OrderAction): OrderState => {
@@ -47,6 +50,8 @@ export const ordersReducer = (state: OrderState, action: OrderAction): OrderStat
         ...state,
         currentPage: action.payload,
       };
+    case 'SET_REFRESH_ORDER':
+      return { ...state, refreshProducts: action.payload }  
     default:
       return state;
   }

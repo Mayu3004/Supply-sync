@@ -37,7 +37,7 @@ const Card = ({ title, description, price, photoUrl, quantity, points, onUpdate,
                             id="quantity"
                             value={inputQuantity}
                             onChange={handleQuantityChange}
-                            min="1"
+                            min='1'
                         />
                     </div>
                 )}

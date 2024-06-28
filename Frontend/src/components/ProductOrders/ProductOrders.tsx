@@ -15,6 +15,12 @@ const ProductOrders = ({ }: ProductOrdersProps) => {
     useEffect(() => {
         fetchData("pending", state.currentPage);
     }, []);
+    useEffect(() => {
+        if (state.refreshProducts) {
+            fetchData("pending",state.currentPage);
+            dispatch({ type: 'SET_REFRESH_ORDER', payload: false });
+        }
+    }, [state.currentPage,state.refreshProducts]);
 
     const fetchData = async (status: string, page: number) => {
         try {
@@ -29,6 +35,7 @@ const ProductOrders = ({ }: ProductOrdersProps) => {
         try {
             await completeOrder(orderId);
             dispatch({ type: 'COMPLETE_ORDER', payload: orderId });
+            dispatch({type:'SET_REFRESH_ORDER',payload:true});
             toast.success("Order Updated successfully")
         } catch (error) {
             console.error('Error completing order:', error);

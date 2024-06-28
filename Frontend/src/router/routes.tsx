@@ -25,6 +25,11 @@ import Profile from "../components/Profile/Profile";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import ManufacturerProductWrapper from "../components/ManufacturerProduct/ManufacturerProduct";
 import ManufacturerInventoryWrapper from "../components/ManufacturerInventory/ManufacturerInventory";
+import { MerchandiseProvider } from "../components/Merchandise/MerchandiseContext";
+import MerchandiseWrapper from "../components/Merchandise/Merchandise";
+import DistributorWrapper from "../components/Distributor/Distributor";
+import DisplayManufacturerSales from "../components/DisplayManufacturerSales/DisplayManufacturerSales";
+import DistributorProductWrapper from "../components/DistributorProduct/DistributorProduct";
 
 type predicate = () => boolean;
 
@@ -75,7 +80,7 @@ const routes = [
                 children: [
                     {
                         path: "",
-                        element: <Random />
+                        element: <TopProductSales />
                     },
                     {
                         path:"top-moving-products",
@@ -87,7 +92,7 @@ const routes = [
                     },
                     {
                         path:"sales-chart",
-                        element:<Random/>
+                        element:<DisplayManufacturerSales/>
                     }
                 ]
             },
@@ -97,11 +102,11 @@ const routes = [
                 children: [
                     {
                         path:'',
-                        element:<Merchandise/>
+                        element:<MerchandiseWrapper/>
                     },
                     {
                         path:'allmerchandise',
-                        element:<Merchandise/>
+                        element:<MerchandiseWrapper/>
                     },
                     {
                         path: 'requestedmerchandise',
@@ -115,7 +120,7 @@ const routes = [
             },
             {
                 path: "distributors",
-                element: <Distributor />
+                element: <DistributorWrapper />
             },
             {
                 path: "profile",
@@ -131,15 +136,15 @@ const routes = [
         children: [
             {
                 path: "",
-                element: <DistributorProduct/>
+                element: <DistributorProductWrapper/>
             },
             {
                 path: "inventory",
-                element: <DistributorProduct />,
+                element: <DistributorProductWrapper />,
             },
             {
                 path: "reports",
-                element: <ManufacturerInventory />
+                element: <DisplayManufacturerSales />
             },
             {
                 path: "requests",

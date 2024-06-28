@@ -1,122 +1,122 @@
 
-import { useEffect, useState } from "react";
-import Card from "../Card/Card.tsx";
-import styles from "./Merchandise.module.scss";
-import { MerchandiseData, MerchandiseProps } from "./Merchandise.types.ts"
-import { deleteMerchandise, fetchMerchandise } from "../../services/manufacturer.Merchandise.ts";
-import MerchandiseForm from "../MerchandiseForm/MerchandiseForm.tsx";
-import { Outlet } from "react-router-dom";
-import Pagination from "../Pagination/Pagination.tsx";
+import {  useEffect } from 'react';
+import Card from '../Card/Card';
+import styles from './Merchandise.module.scss';
+import { MerchandiseData, MerchandiseProps } from './Merchandise.types';
+import { deleteMerchandise, fetchMerchandise } from '../../services/manufacturer.Merchandise';
+import MerchandiseForm from '../MerchandiseForm/MerchandiseForm';
+import Pagination from '../Pagination/Pagination';
+import { MerchandiseProvider, useMerchandiseContext } from './MerchandiseContext';
+import { toast } from 'react-toastify';
 
-const Merchandise = ({ }: MerchandiseProps) => {
-    const [merchandises, setMerchandises] = useState<MerchandiseData[]>([]);
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [selectedMerchandise, setSelectedMerchandise] = useState<MerchandiseData | null>(null);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(10);
 
-    useEffect(() => {
-        fetchMerchandiseHandler(currentPage);
-    }, []);
+const Merchandise= ({}:MerchandiseProps) => {
+    const { state, dispatch } = useMerchandiseContext();
 
-    const fetchMerchandiseHandler = async (page:number) => {
-        try {
-            const value = await fetchMerchandise(page);
-            setMerchandises(value);
-        } catch (error) {
-            console.error("Error fetching merchandise:", error);
-        }
+  useEffect(() => {
+    fetchMerchandiseHandler(state.currentPage);
+  }, [state.currentPage]);
+
+  const fetchMerchandiseHandler = async (page: number) => {
+    try {
+      const value = await fetchMerchandise(page);
+      dispatch({ type: 'SET_MERCHANDISES', payload: value });
+    } catch (error) {
+      console.error('Error fetching merchandise:', error);
     }
+  };
 
-    const handleUpdate = (merchandise: MerchandiseData) => {
-        setSelectedMerchandise(merchandise);
-        setModalOpen(true);
-    };
+  const handleUpdate = (merchandise: MerchandiseData) => {
+    dispatch({ type: 'SET_SELECTED_MERCHANDISE', payload: merchandise });
+    dispatch({ type: 'SET_MODAL_OPEN', payload: true });
+  };
 
-    const handleDelete = async(id: string) => {
-       
-       
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteMerchandise(id);
+      dispatch({
+        type: 'SET_MERCHANDISES',
+        payload: state.merchandises.filter(
+          (merchandise) => merchandise._id !== id
+        ),
+      });
+      toast.success("Merchandise deleted successfully")
+    } catch (error) {
+      console.error('Error deleting merchandise:', error);
+    }
+  };
 
-        try {
-            const value = await deleteMerchandise(id);
-         
-            
-        } catch (error) {
-            console.error("Error fetching merchandise:", error);
-        }
-        
-        // setMerchandises(prevMerchandises => prevMerchandises.filter(merchandise => merchandise._id !== id));
-    };
+  const closeModal = () => {
+    dispatch({ type: 'SET_MODAL_OPEN', payload: false });
+    dispatch({ type: 'SET_SELECTED_MERCHANDISE', payload: null });
+  };
 
-    const closeModal = () => {
-        setModalOpen(false);
-        setSelectedMerchandise(null);
-    };
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        fetchMerchandiseHandler(page);
-    };
+  const handlePageChange = (page: number) => {
+    dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
+  };
 
-    const handleSubmit = (formData: MerchandiseData) => {
-       
-        
-       
-        setMerchandises(prevMerchandises => {
-            const updatedMerchandises = [...prevMerchandises];
-            const index = updatedMerchandises.findIndex(merchandise => merchandise._id === formData._id);
-            if (index !== -1) {
-                updatedMerchandises[index] = formData;
-            } else {
-                updatedMerchandises.push(formData); 
-            }
-            return updatedMerchandises;
-        });
-        closeModal();
-    };
+  const handleSubmit = async(formData: MerchandiseData) => {
+    dispatch({
+      type: 'SET_MERCHANDISES',
+      payload: state.merchandises.map((merchandise) =>
+        merchandise._id === formData._id ? formData : merchandise
+      ),
+    });
+    closeModal();
+    await fetchMerchandiseHandler(state.currentPage);
+  };
 
-    return (
-        
-        <div className={styles.MerchandiseContainer}>
-            
-            <button className={styles.AddBtn} onClick={() => setModalOpen(true)}>ADD</button>
-            
-            <div className={styles.MerchandiseDataContainer}>
-                {merchandises.map((merchandise, index) => (
-                    <Card
-                        key={index}
-                        title={merchandise.merchandiseName}
-                        description={merchandise.merchandiseDescription}
-                        points={merchandise.pointsRequired}
-                        photoUrl={merchandise.merchandiseImage}
-                        onUpdate={() => handleUpdate(merchandise)}
-                        onDelete={() => handleDelete(merchandise._id)}
-                    />
-                ))}
-            </div>
-            {modalOpen && (
-                <div className={styles.ModalView}>
-                    <div className={styles.ModalContent}>
-                        <button className={styles.CloseBtn} onClick={closeModal}>X</button>
-                        <MerchandiseForm
-                            closeModal={closeModal}
-                            handleSubmit={handleSubmit}
-                            merchandise={selectedMerchandise}
-                        />
-                    </div>
-                </div>
-            )}
-           <div className={styles.Footer}>
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
-            </div>
+  return (
+    <div className={styles.MerchandiseContainer}>
+      <button
+        className={styles.AddBtn}
+        onClick={() => dispatch({ type: 'SET_MODAL_OPEN', payload: true })}
+      >
+        ADD
+      </button>
+
+      <div className={styles.MerchandiseDataContainer}>
+        {state.merchandises.map((merchandise, index) => (
+          <Card
+            key={index}
+            title={merchandise.merchandiseName}
+            description={merchandise.merchandiseDescription}
+            points={merchandise.pointsRequired}
+            photoUrl={merchandise.merchandiseImage}
+            onUpdate={() => handleUpdate(merchandise)}
+            onDelete={() => handleDelete(merchandise._id)}
+          />
+        ))}
+      </div>
+      {state.modalOpen && (
+        <div className={styles.ModalView}>
+          <div className={styles.ModalContent}>
+            <button className={styles.CloseBtn} onClick={closeModal}>
+              X
+            </button>
+            <MerchandiseForm
+              closeModal={closeModal}
+              handleSubmit={handleSubmit}
+              merchandise={state.selectedMerchandise}
+            />
+          </div>
         </div>
-    
-        
-    );
-}
+      )}
+      <div className={styles.Footer}>
+        <Pagination
+          currentPage={state.currentPage}
+          totalPages={state.totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
+    </div>
+  );
+};
 
-export default Merchandise;
+const MerchandiseWrapper = () => (
+  <MerchandiseProvider>
+      <Merchandise />
+  </MerchandiseProvider>
+);
 
+export default MerchandiseWrapper;

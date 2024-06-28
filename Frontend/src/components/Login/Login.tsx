@@ -7,15 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Login = ({ }: LoginProps) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginData>()
+    const { register, handleSubmit,reset, formState: { errors } } = useForm<LoginData>()
     const navigate = useNavigate()
-    const [loginError, setLoginError] = useState<string>("");
+    
 
     const onSubmit = async (data: LoginData) => {
         try {
            
             const responseData = await LoginRequestHandler(data);
-            
             localStorage.setItem("token", JSON.stringify(responseData.token))
             localStorage.setItem("role", JSON.stringify(responseData.role))
             localStorage.setItem("userId", JSON.stringify(responseData.userId))
@@ -29,7 +28,7 @@ const Login = ({ }: LoginProps) => {
             }
         }
         catch(error:any){
-            setLoginError(error.message)
+            reset()
         }
            
         
@@ -69,7 +68,7 @@ const Login = ({ }: LoginProps) => {
                     </div>
                     <button className={styles.LoginBtn}>Login</button>
                 </form>
-                {loginError && <div className={styles.Error}>{loginError}</div>}
+                
             </div>
             
         </div>

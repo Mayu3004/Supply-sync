@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { DistributorData } from "../components/Distributor/Distributor.types";
 import { DistributorFormData } from "../components/DistributorForm/DistributorForm.types";
 import Instance from "./instance.services";
@@ -15,31 +16,36 @@ export const fetchDistributor = async (page:number) =>{
 }
 export const addDistributor = async (data: DistributorFormData) => {
    
-  
     try {  
-      const response = await Instance.post("users/create-user", data);
+      const response = await Instance.post("user/create-user", data);
+      toast.success("Distributor updated succesfully")
       return response.data;
-    } catch (error) {
-      console.error("Error sending Distributor Detail:", error);
+    } catch (error:any) {
+      toast.error(`${error.response.data.error.message}`);
+      // console.error("Error sending Distributor Detail:", error);
     }
   }
 
   export const updateDistributor = async (distributorId: string | null, data: Partial<DistributorFormData>) => {
+   
+        const dataPost = {name:data.name,mobileNumber:data.mobileNumber,email:data.email,totalPoints:data.totalPoints}
 
     try {  
-      const response = await Instance.put(`/user/update/${distributorId}`, data);
+      const response = await Instance.put(`/user/update/${distributorId}`, dataPost);
+      toast.success("Distributor updated succesfully")
       return response.data;
-    } catch (error) {
-      console.error('Error updating user:', error);
+    } catch (error:any) {
+      toast.error(`${error.response.data.error.message}`);
     }
   };
  
   export const deleteDistributor = async (distributorId: string | null) => {
     try {
       const response = await Instance.delete(`/user/delete/${distributorId}`)
+      toast.success("Distributor Deleted sucessfully")
       return response.data;
-    } catch (error) {
-      console.error('Error deleting user:', error);
+    } catch (error:any) {
+      toast.error(`${error.response.data.error.message}`);
     }
   };
 
@@ -69,7 +75,7 @@ export const fetchPerformers = async (startDate:string,endDate:string) =>{
      
     return response.data;
   } catch (error) {
-    console.error("Error fetching Distributor Detail:", error);
+    toast.error("Error fetching Distributor Detail:");
   }
 }
 
@@ -87,5 +93,22 @@ export const fetchTopProducts = async (startDate:string,endDate:string)=>{
     return response.data;
   } catch (error) {
     console.error("Error fetching Distributor Detail:", error);
+  }
+}
+
+export const fetchSales = async (startDate:string,endDate:string)=>{
+  try {
+        
+    const response = await Instance.get("sales/salesperproduct", {
+      params: {
+        startdate: startDate,
+        enddate: endDate
+      }
+    });
+    
+     
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Sales Detail:", error);
   }
 }
